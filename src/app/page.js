@@ -1,182 +1,124 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-export default function Phase1Page() {
-  const router = useRouter();
-
-  // 1. Core Component States
-  const [name, setName] = useState("");
-  const [location, setLocation] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [successMsg, setSuccessMsg] = useState("");
-
-  // 2. Read existing saved state if user returns or refreshes
-  useEffect(() => {
-    const savedInfo = localStorage.getItem("skinstric_user");
-    if (savedInfo) {
-      try {
-        const { name: savedName, location: savedLocation } = JSON.parse(savedInfo);
-        setName(savedName || "");
-        setLocation(savedLocation || "");
-        
-        // Match sidebar DOM elements dynamically if mounted
-        updateSidebarDOM(savedName, savedLocation);
-      } catch (e) {
-        console.error("Error reading localStorage key token", e);
-      }
-    }
-  }, []);
-
-  // Sync state values helper straight to the layout sidebar
-  const updateSidebarDOM = (n, l) => {
-    const sbName = document.getElementById("sb-name");
-    const sbLoc = document.getElementById("sb-location");
-    if (sbName) sbName.innerText = n || "Not Provided";
-    if (sbLoc) sbLoc.innerText = l || "Not Provided";
-  };
-
-  // 3. Strict String Validation Logic (No numbers, no special symbols/broken inputs)
-  const validateStringFields = (val) => {
-    const stringRegex = /^[A-Za-z\s\-',.]{2,50}$/;
-    return stringRegex.test(val.trim());
-  };
-
-  // 4. Form Submit & API Connection Pipeline
-  const handleProceed = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSuccessMsg("");
-
-    // Step Validation
-    if (!validateStringFields(name)) {
-      setError("Please enter a valid name string (letters only, minimum 2 characters).");
-      return;
-    }
-    if (!validateStringFields(location)) {
-      setError("Please enter a valid location profile string (letters only).");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await fetch("https://us-central1-frontend-simplified.cloudfunctions.net/skinstricPhaseOne", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: name.trim(), location: location.trim() }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok || data.SUCCUSS) {
-        setSuccessMsg(data.SUCCUSS || "Customer profile synchronized successfully!");
-        
-        // Store strings into local storage for Phase 2/3 persistence
-        localStorage.setItem("skinstric_user", JSON.stringify({ name: name.trim(), location: location.trim() }));
-        updateSidebarDOM(name.trim(), location.trim());
-
-        // Smooth transition push to Phase 2 dashboard route context
-        setTimeout(() => {
-          router.push("/phase-2");
-        }, 1200);
-      } else {
-        throw new Error("Failed validation transaction from backend endpoint.");
-      }
-    } catch (err) {
-      setError("Connection to processing API failed. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function IntroPage() {
   return (
-    <div className="space-y-6">
-      <div>
-        <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">
-          Phase 1 of 3
-        </span>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900 mt-3">
-          Initial Customer Registration
-        </h2>
-        <p className="text-sm text-slate-500 mt-1">
-          Complete the field structures below to map the diagnostic telemetry profile.
-        </p>
+    <div className="max-sm:scale-[0.75] max-sm:origin-center max-sm:p-6 bg-white text-[#1A1B1C]">
+      
+      {/* =========================================================================
+          PRODUCTION HEADER SECTION (H: 64px)
+          ========================================================================= */}
+      <div className="flex flex-row h-[64px] w-full justify-between py-3 mb-3 relative z-[1000]">
+        {/* Left Branding Group */}
+        <div className="flex flex-row pt-1 scale-75 justify-center items-center">
+          <Link 
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-colors h-9 px-4 py-2 font-semibold text-sm mr-2 line-clamp-4 leading-[16px] text-[#1A1B1C] z-1000" 
+            href="/"
+          >
+            SKINSTRIC
+          </Link>
+          
+          {/* Custom Bracket Accents (Simulated cleanly with spans matching his layout dimensions) */}
+          <span className="w-[4px] h-[17px] bg-zinc-300 inline-block rounded-sm" />
+          <p className="text-[#1a1b1c83] text-opacity-70 font-semibold text-sm ml-1.5 mr-1.5">
+            INTRO
+          </p>
+          <span className="w-[4px] h-[17px] bg-zinc-300 inline-block rounded-sm" />
+        </div>
+
+        {/* Action Call Button */}
+        <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold transition-colors disabled:pointer-events-none text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 mx-4 scale-[0.8] text-[#FCFCFC] text-[10px] bg-[#1A1B1C] leading-[16px]">
+          ENTER CODE
+        </button>
       </div>
 
-      <form onSubmit={handleProceed} className="space-y-4 pt-2">
-        {/* Input Name field */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold uppercase tracking-wider text-slate-700">
-            Customer Full Name
-          </label>
-          <input
-            type="text"
-            placeholder="e.g. John Doe"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-              updateSidebarDOM(e.target.value, location);
-            }}
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all text-slate-900 placeholder:text-slate-400"
-            required
-          />
+      {/* =========================================================================
+          PRODUCTION CORE VIEWPORT WRAPPER
+          ========================================================================= */}
+      <div className="flex flex-col items-center justify-center h-[71dvh] md:fixed md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
+        
+        {/* MOBILE ONLY OVERLAY DECORATIONS (Hidden on LG viewports) */}
+        <div className="absolute inset-0 flex items-center justify-center lg:hidden">
+          <div className="w-[350px] h-[350px] border border-dotted border-[#A0A4AB] rotate-45 absolute top-1/2 left-1/2 -translate-x-[52%] -translate-y-1/2"></div>
+        </div>
+        <div className="absolute inset-0 flex items-center justify-center lg:hidden">
+          <div className="w-[420px] h-[420px] border border-dotted border-[#A0A4AB] rotate-45 absolute top-1/2 left-1/2 -translate-x-[52%] -translate-y-1/2"></div>
         </div>
 
-        {/* Input Location field */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold uppercase tracking-wider text-slate-700">
-            Current Location
-          </label>
-          <input
-            type="text"
-            placeholder="e.g. New York"
-            value={location}
-            onChange={(e) => {
-              setLocation(e.target.value);
-              updateSidebarDOM(name, e.target.value);
-            }}
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all text-slate-900 placeholder:text-slate-400"
-            required
-          />
+        {/* COMPRESSED MAIN HERO HEADING */}
+        <div id="main-heading" className="relative z-10 text-center">
+          <h1 className="text-[60px] text-[#1A1B1C] lg:text-[100px] font-inter font-normal tracking-tighter leading-none">
+            Sophisticated<br />
+            <span className="block text-[#1A1B1C] md:-translate-x-24">skincare</span>
+          </h1>
         </div>
 
-        {/* System Messages Alerts */}
-        {error && (
-          <div className="p-3 bg-rose-50 border border-rose-100 rounded-xl text-xs font-medium text-rose-600">
-            {error}
+        {/* MOBILE RESPONSIVE FALLBACK CONTEXTS */}
+        <p className="z-10 block lg:hidden w-[30ch] mt-4 text-[16px] font-semibold text-center text-muted-foreground text-[#1a1b1c83]">
+          Skinstric developed an A.I. that creates a highly-personalized routine tailored to what your skin needs.
+        </p>
+
+        <div className="z-10 mt-4 lg:hidden">
+          <Link href="/phase-1">
+            <button className="relative flex items-center gap-4 hover:scale-105 duration-300">
+              <span className="text-[12px] font-bold cursor-pointer">ENTER EXPERIENCE</span>
+              <div className="w-[24px] h-[24px] border border-solid border-black rotate-45 cursor-pointer"></div>
+              <span className="absolute left-[129px] scale-[0.5] hover:scale-60 duration-300">
+                <svg viewBox="0 0 24 24" width="24" height="24" className="fill-current text-black">
+                  <path d="M8 5v14l11-7z"></path>
+                </svg>
+              </span>
+            </button>
+          </Link>
+        </div>
+
+        {/* =========================================================================
+            DESKTOP PERSISTENT EDITORIAL FOOTER
+            ========================================================================= */}
+        <div className="hidden lg:block fixed bottom-[calc(-7vh)] left-[calc(-20vw)] xl:left-[calc(-27vw)] 2xl:left-[calc(-31vw)] [@media(width>=1920px)]:left-[calc(-33vw)] font-normal text-sm text-[#1A1B1C] space-y-3 uppercase">
+          <p>
+            Skinstric developed an A.I. that creates a<br />
+            highly-personalized routine tailored to<br />
+            what your skin needs.
+          </p>
+        </div>
+
+        {/* =========================================================================
+            THE LOGICAL SIDE SECTION RHOMBUS SYSTEMS (500px x 500px)
+            ========================================================================= */}
+        
+        {/* Left Side Section Rhombus Framework */}
+        <div id="left-section" className="hidden lg:block fixed left-[calc(-53vw)] xl:left-[calc(-50vw)] top-1/2 -translate-y-1/2 w-[500px] h-[500px] transition-opacity duration-500 ease-in-out opacity-100">
+          <div className="relative w-full h-full">
+            {/* Embedded Rhombus */}
+            <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 fixed inset-0"></div>
+            {/* Interaction Action Button */}
+            <button id="discover-button" className="group inline-flex items-center justify-center gap-4 whitespace-nowrap rounded-md text-sm font-normal text-[#1A1B1C] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer disabled:opacity-50 h-9 absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/5 xl:translate-x-1/6 [@media(width>=1920px)]:translate-x-1/20 px-3 py-1">
+              <div className="w-[30px] h-[30px] border border-solid border-black rotate-45 cursor-pointer group-hover:scale-110 duration-300"></div>
+              <span className="absolute left-[18px] top-[8px] scale-[0.9] rotate-180 group-hover:scale-105 duration-300">▶</span>
+              <span>DISCOVER A.I.</span>
+            </button>
           </div>
-        )}
-
-        {successMsg && (
-          <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-xl text-xs font-medium text-emerald-600">
-            {successMsg}
-          </div>
-        )}
-
-        {/* Navigation Action Buttons footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-slate-100 mt-6">
-          <button
-            type="button"
-            disabled
-            className="px-5 py-2.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-400 cursor-not-allowed transition-all"
-          >
-            Back
-          </button>
-          
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-6 py-2.5 rounded-xl text-xs font-semibold bg-black text-white hover:bg-slate-800 transition-all shadow-sm active:scale-95 disabled:opacity-50"
-          >
-            {loading ? "Processing..." : "Proceed"}
-          </button>
         </div>
-      </form>
+
+        {/* Right Side Section Rhombus Framework */}
+        <div id="right-section" className="hidden lg:block fixed top-1/2 right-[calc(-53vw)] xl:right-[calc(-50vw)] -translate-y-1/2 w-[500px] h-[500px] transition-opacity duration-500 ease-in-out opacity-100">
+          <div className="relative w-full h-full">
+            {/* Embedded Rhombus */}
+            <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 absolute inset-0"></div>
+            {/* Interaction Link Trigger */}
+            <Link href="/phase-1">
+              <button id="take-test-button" className="group inline-flex items-center justify-center gap-4 whitespace-nowrap rounded-md text-sm font-normal text-[#1A1B1C] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer disabled:opacity-50 h-9 absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/5 xl:-translate-x-1/6 [@media(width>=1920px)]:-translate-x-1/20 px-3 py-1">
+                TAKE TEST
+                <div className="w-[30px] h-[30px] border border-solid border-black rotate-45 group-hover:scale-110 duration-300"></div>
+                <span className="absolute left-[107px] top-[9px] scale-[0.9] cursor-pointer group-hover:scale-105 duration-300">▶</span>
+              </button>
+            </Link>
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
