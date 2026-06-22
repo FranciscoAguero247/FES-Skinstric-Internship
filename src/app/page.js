@@ -1,22 +1,127 @@
 import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function HeroSection() {
   return (
     <div className="min-h-screen bg-[#f4f7f6] overflow-x-hidden flex flex-col justify-between select-none">
       
       {/* HEADER */}
-      <header className="relative w-full h-16 flex items-center px-8">
-        <div className="font-['Roobert_TRIAL',_sans-serif] font-semibold text-sm leading-4 tracking-[-0.02em] uppercase text-[#1A1B1C]">
-          Skinstric
-        </div>
-        <div className="ml-4 opacity-60 font-['Roobert_TRIAL',_sans-serif] text-sm leading-[17px] text-[#1A1B1C]">
-          [ Intro ]
-        </div>
-        <button className="absolute top-[15px] right-8 w-[92px] h-8 bg-[#1A1B1C] border-none px-4 py-2 flex items-center justify-center text-center cursor-pointer font-['Roobert_TRIAL',_sans-serif] font-semibold text-[10px] leading-4 tracking-[-0.02em] uppercase text-[#FCFCFC] transition-opacity duration-200 hover:opacity-90">
-          Enter Code
-        </button>
-      </header>
 
+      {/* 1. Logo Text (Figma Spec Absolute) */}
+      <Link 
+      href="/" 
+      className="
+        absolute 
+        top-[23px] 
+        left-[32px] 
+        w-[69px] 
+        h-[16px] 
+        opacity-100 
+        rotate-0
+        no-underline
+        font-['Roobert_TRIAL',sans-serif] 
+        font-semibold 
+        text-[14px] 
+        leading-[16px] 
+        tracking-[-0.02em] 
+        uppercase 
+        text-[#1A1B1C]
+      "
+    >
+      Skinstric
+    </Link>
+      
+      {/* 2. Intro Wrapper (Figma Spec Absolute) */}
+      <div 
+        className="
+          absolute 
+          top-[23px] 
+          left-[117px] 
+          w-[61px] 
+          h-[17px] 
+          opacity-60 
+          rotate-0
+          flex 
+          items-center 
+          justify-start
+          gap-[6px]
+        "
+      >
+        {/* Left Bracket Image (Served directly from the public folder) */}
+        <Image 
+          src="/Rectangle2710.webp"
+          alt="left-bracket" 
+          width={5} 
+          height={19} 
+          priority
+          className="w-[4px] h-[17px] shrink-0 object-contain" 
+        />
+
+        {/* Inner "Intro" Text Element */}
+        <span 
+          className="
+            w-[41px] 
+            h-[16px] 
+            opacity-100
+            font-['Roobert_TRIAL',sans-serif] 
+            font-semibold 
+            text-[14px] 
+            leading-[16px] 
+            tracking-[-0.02em] 
+            uppercase 
+            text-[#1A1B1C]
+          "
+        >
+          Intro
+        </span>
+        
+        {/* Right Bracket Image (Served directly from the public folder) */}
+        <Image 
+          src="/Rectangle2711.webp"
+          alt="right-bracket" 
+          width={5} 
+          height={19} 
+          priority
+          className="w-[4px] h-[17px] shrink-0 object-contain" 
+        />
+      </div>
+
+      {/* 3. Right side: Action Button */}
+      <button 
+  className="
+    absolute 
+    top-[15px] 
+    right-[32px] 
+    w-[92px] 
+    h-[32px] 
+    bg-[#1A1B1C] 
+    border-none 
+    p-[8px_16px] 
+    flex 
+    items-center 
+    justify-center 
+    text-center 
+    cursor-pointer 
+    
+    font-['Roobert_TRIAL','Segoe_UI',sans-serif] 
+    font-semibold 
+    text-[10px] 
+    leading-[16px] 
+    tracking-[-0.02em] 
+    uppercase 
+    text-[#FCFCFC] 
+    
+    transition-opacity 
+    duration-200 
+    ease-in-out 
+    hover:opacity-90
+  "
+>
+  Enter Code
+</button>
+
+    
       {/* HERO CONTAINER */}
       <main className="flex-grow w-full px-8 flex justify-between items-center relative">
         
