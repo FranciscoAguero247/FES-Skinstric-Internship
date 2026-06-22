@@ -4,182 +4,110 @@ import Image from 'next/image';
 
 export default function HeroSection() {
   return (
-    <div className="min-h-screen bg-[#f4f7f6] overflow-x-hidden flex flex-col justify-between select-none">
+    <div className="__className_5f0add antialiased text-[#1A1B1C] min-h-screen flex flex-col justify-between">
       
-      {/* HEADER */}
-      <Link 
-        href="/" 
-        className="
-          absolute 
-          top-[23px] 
-          left-[32px] 
-          w-[69px] 
-          h-[16px] 
-          opacity-100 
-          rotate-0
-          no-underline
-          font-['Roobert_TRIAL',sans-serif] 
-          font-semibold 
-          text-[14px] 
-          leading-[16px] 
-          tracking-[-0.02em] 
-          uppercase 
-          text-[#1A1B1C]
-        "
-      >
-        Skinstric
-      </Link>
-        
-     
-      <div 
-        className="
-          absolute 
-          top-[23px] 
-          left-[117px] 
-          w-[61px] 
-          h-[17px] 
-          opacity-60 
-          rotate-0
-          flex 
-          items-center 
-          justify-start
-          gap-[6px]
-        "
-      >
-       
-        <Image 
-          src="/Rectangle2710.webp"
-          alt="left-bracket" 
-          width={5} 
-          height={19} 
-          priority
-          className="w-[4px] h-[17px] shrink-0 object-contain" 
-        />
+      {/* 1. HEADER NAVBAR */}
+      <div className="flex flex-row h-[64px] w-full justify-between py-3 mb-3 relative z-[1000]">
+        {/* Left Brand + Intro block */}
+        <div className="flex flex-row pt-1 scale-75 justify-center items-center">
+          <Link 
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-colors h-9 px-4 py-2 font-semibold text-sm mr-2 line-clamp-4 leading-[16px] text-[#1A1B1C] z-1000" 
+            href="/"
+          >
+            SKINSTRIC
+          </Link>
+          <Image 
+            alt="left-bracket" 
+            width={5} 
+            height={19} 
+            className="w-[4px] h-[17px]" 
+            src="/_next/static/media/Rectangle 2710.61a74ed4.png" // Replace with your actual asset path
+          />
+          <p className="text-[#1A1B1C] text-opacity-70 font-semibold text-sm ml-1.5 mr-1.5">INTRO</p>
+          <Image 
+            alt="right-bracket" 
+            width={5} 
+            height={19} 
+            className="w-[4px] h-[17px]" 
+            src="/_next/static/media/Rectangle 2711.b2b3b291.png"
+          />
+        </div>
 
-        <span 
-          className="
-            w-[41px] 
-            h-[16px] 
-            opacity-100
-            font-['Roobert_TRIAL',sans-serif] 
-            font-semibold 
-            text-[14px] 
-            leading-[16px] 
-            tracking-[-0.02em] 
-            uppercase 
-            text-[#1A1B1C]
-          "
-        >
-          Intro
-        </span>
-        
-        <Image 
-          src="/Rectangle2711.webp"
-          alt="right-bracket" 
-          width={5} 
-          height={19} 
-          priority
-          className="w-[4px] h-[17px] shrink-0 object-contain" 
-        />
+        {/* Right Header Button */}
+        <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold transition-colors disabled:pointer-events-none text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 mx-4 scale-[0.8] text-[#FCFCFC] text-[10px] bg-[#1A1B1C] leading-[16px]">
+          ENTER CODE
+        </button>
       </div>
 
-   
-      <button 
-        className="
-          absolute 
-          top-[15px] 
-          right-[32px] 
-          w-[92px] 
-          h-[32px] 
-          bg-[#1A1B1C] 
-          border-none 
-          p-[8px_16px] 
-          flex 
-          items-center 
-          justify-center 
-          text-center 
-          cursor-pointer 
+      {/* 2. MAIN HERO WRAPPER (Handles global mobile scaling) */}
+      <div className="max-sm:scale-[0.75] max-sm:origin-center max-sm:p-6 flex-grow">
+        <div className="flex flex-col items-center justify-center h-[71dvh] md:fixed md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
           
-          font-['Roobert_TRIAL','Segoe_UI',sans-serif] 
-          font-semibold 
-          text-[10px] 
-          leading-[16px] 
-          tracking-[-0.02em] 
-          uppercase 
-          text-[#FCFCFC] 
-          
-          transition-opacity 
-          duration-200 
-          ease-in-out 
-          hover:opacity-90
-        "
-      >
-        Enter Code
-      </button>
+          {/* Mobile Background Dotted Boxes (Hidden on desktop) */}
+          <div className="absolute inset-0 flex items-center justify-center lg:hidden">
+            <div className="w-[350px] h-[350px] border border-dotted border-[#A0A4AB] rotate-45 absolute top-1/2 left-1/2 -translate-x-[52%] -translate-y-1/2"></div>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center lg:hidden">
+            <div className="w-[420px] h-[420px] border border-dotted border-[#A0A4AB] rotate-45 absolute top-1/2 left-1/2 -translate-x-[52%] -translate-y-1/2"></div>
+          </div>
 
-    
-      {/* HERO CONTAINER */}
-      <main className="flex-grow w-full px-8 flex justify-between items-center relative">
-        
-        {/* LEFT SIDE BUTTON & DOTTED DIAMOND */}
-        <div className="relative flex items-center justify-start w-[220px] h-[400px] z-10 before:content-[''] before:absolute before:top-0 before:left-[-200px] before:w-[400px] before:h-[400px] before:border-2 before:border-dotted before:border-[#A0A4AB] before:rotate-45 before:-z-10 before:pointer-events-none">
-          <button className="inline-flex items-center gap-4 bg-transparent border-none cursor-pointer z-10 transition-all active:scale-[0.98] hover:opacity-80 group">
-            <div className="w-11 h-11 flex items-center justify-center">
-              <div className="w-6 h-6 border border-[#1A1B1C] rotate-45 flex items-center justify-center relative">
-                <div className="w-2 h-2 bg-[#1A1B1C] [clip-path:polygon(100%_0%,_0%_50%,_100%_100%)] -rotate-45 mr-[2px]" />
-              </div>
+          {/* Central Typography Heading */}
+          <div id="main-heading" className="relative z-10 text-center">
+            <h1 className="text-[60px] text-[#1A1B1C] lg:text-[100px] font-inter font-normal tracking-tighter leading-none">
+              Sophisticated<br />
+              <span className="block text-[#1A1B1C]">skincare</span>
+            </h1>
+          </div>
+
+          {/* Mobile Description & CTA (Hidden on desktop) */}
+          <p className="z-10 block lg:hidden w-[30ch] mt-4 text-[16px] font-semibold text-center text-muted-foreground text-[#1a1b1c83]">
+            Skinstric developed an A.I. that creates a highly-personalized routine tailored to what your skin needs.
+          </p>
+          <div className="z-10 mt-4 lg:hidden">
+            <Link href="/testing">
+              <button className="relative flex items-center gap-4 hover:scale-105 duration-300">
+                <span className="text-[12px] font-bold cursor-pointer">ENTER EXPERIENCE</span>
+                <div className="w-[24px] h-[24px] border border-solid border-black rotate-45 cursor-pointer"></div>
+                <span className="absolute left-[129px] scale-[0.5] hover:scale-60 duration-300">
+                  <svg viewBox="0 0 24 24" width="24" height="24" className="fill-current text-black"><path d="M8 5v14l11-7z"></path></svg>
+                </span>
+              </button>
+            </Link>
+          </div>
+
+          {/* Desktop Description Footer (Hidden on mobile, layout snaps left) */}
+          <div className="hidden lg:block fixed bottom-[calc(-7vh)] left-[calc(-20vw)] xl:left-[calc(-27vw)] 2xl:left-[calc(-31vw)] font-normal text-sm text-[#1A1B1C] space-y-3 uppercase">
+            <p>Skinstric developed an A.I. that creates a<br />highly-personalized routine tailored to<br />what your skin needs.</p>
+          </div>
+
+          {/* LEFT SECTION - DISCOVER A.I. (Desktop Only) */}
+          <div id="left-section" className="hidden lg:block fixed left-[calc(-53vw)] xl:left-[calc(-50vw)] top-1/2 -translate-y-1/2 w-[500px] h-[500px] transition-opacity duration-500 ease-in-out opacity-100">
+            <div className="relative w-full h-full">
+              <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 fixed inset-0"></div>
+              <button id="discover-button" className="group inline-flex items-center justify-center gap-4 whitespace-nowrap rounded-md text-sm font-normal text-[#1A1B1C] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer h-9 absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/5 xl:translate-x-1/6 px-3 py-1">
+                <div className="w-[30px] h-[30px] border border-solid border-black rotate-45 cursor-pointer group-hover:scale-110 duration-300"></div>
+                <span className="absolute left-[18px] top-[8px] scale-[0.9] rotate-180 group-hover:scale-105 duration-300">▶</span>
+                <span>DISCOVER A.I.</span>
+              </button>
             </div>
-            <span className="font-['Roobert_TRIAL',_sans-serif] font-semibold text-sm leading-4 uppercase tracking-[0.5px] whitespace-nowrap text-[#1A1B1C]">
-              Discover A.I.
-            </span>
-          </button>
-        </div>
+          </div>
 
-        {/* HERO TITLE */}
-        <h1 
-          className="font-roobert font-light text-[60px] leading-tight lg:text-[128px] lg:leading-[120px] tracking-[-0.07em] text-[#1A1B1C] text-center opacity-0" 
-          style={{ 
-            opacity: 1, 
-            transform: 'translate(0px, 0px)' 
-          }}
-        >
-          Sophisticated
-          <br />
-          <span 
-            className="block text-[#1A1B1C]" 
-            style={{ 
-              transform: 'translate(0px, 0px)' 
-            }}
-          >
-            skincare
-          </span>
-        </h1>
-
-
-        {/* RIGHT SIDE BUTTON & DOTTED DIAMOND */}
-        <div className="relative flex items-center justify-end w-[220px] h-[400px] z-10 before:content-[''] before:absolute before:top-0 before:right-[-200px] before:w-[400px] before:h-[400px] before:border-2 before:border-dotted before:border-[#A0A4AB] before:rotate-45 before:-z-10 before:pointer-events-none">
-          <button className="inline-flex items-center gap-4 flex-row-reverse bg-transparent border-none cursor-pointer z-10 transition-all active:scale-[0.98] hover:opacity-80 group">
-            <div className="w-11 h-11 flex items-center justify-center">
-              <div className="w-6 h-6 border border-[#1A1B1C] rotate-45 flex items-center justify-center relative">
-                <div className="w-2 h-2 bg-[#1A1B1C] [clip-path:polygon(100%_0%,_0%_50%,_100%_100%)] rotate-[135deg] ml-[2px]" />
-              </div>
+          {/* RIGHT SECTION - TAKE TEST (Desktop Only) */}
+          <div id="right-section" className="hidden lg:block fixed top-1/2 right-[calc(-53vw)] xl:right-[calc(-50vw)] -translate-y-1/2 w-[500px] h-[500px] transition-opacity duration-500 ease-in-out opacity-100">
+            <div className="relative w-full h-full">
+              <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 absolute inset-0"></div>
+              <Link href="/testing">
+                <button id="take-test-button" className="group inline-flex items-center justify-center gap-4 whitespace-nowrap rounded-md text-sm font-normal text-[#1A1B1C] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer h-9 absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/5 xl:-translate-x-1/6 px-3 py-1">
+                  TAKE TEST
+                  <div className="w-[30px] h-[30px] border border-solid border-black rotate-45 group-hover:scale-110 duration-300"></div>
+                  <span className="absolute left-[107px] top-[9px] scale-[0.9] cursor-pointer group-hover:scale-105 duration-300">▶</span>
+                </button>
+              </Link>
             </div>
-            <span className="font-['Roobert_TRIAL',_sans-serif] font-semibold text-sm leading-4 uppercase tracking-[0.5px] whitespace-nowrap text-[#1A1B1C]">
-              Take Test
-            </span>
-          </button>
+          </div>
+
         </div>
-
-      </main>
-
-      {/* FOOTER */}
-      <footer className="relative py-10 px-8 flex items-center justify-start min-w-[316px]">
-        <p className="text-left font-['Roobert_TRIAL',_sans-serif] font-normal text-sm leading-6 uppercase text-[#1A1B1C]">
-          Skinstric developed an A.I. that creates <br />
-          a highly-personalised routine tailored to <br />
-          what your skin needs.
-        </p>
-      </footer>
+      </div>
 
     </div>
   );
