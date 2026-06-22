@@ -21,7 +21,7 @@ export default function HeroSection() {
             width={5} 
             height={19} 
             className="w-[4px] h-[17px]" 
-            src="/_next/static/media/Rectangle 2710.61a74ed4.png" // Replace with your actual asset path
+            src="/left-bracket.png"
           />
           <p className="text-[#1A1B1C] text-opacity-70 font-semibold text-sm ml-1.5 mr-1.5">INTRO</p>
           <Image 
@@ -29,7 +29,7 @@ export default function HeroSection() {
             width={5} 
             height={19} 
             className="w-[4px] h-[17px]" 
-            src="/_next/static/media/Rectangle 2711.b2b3b291.png"
+            src="/right-bracket.png"
           />
         </div>
 
