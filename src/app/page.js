@@ -7,32 +7,30 @@ export default function HeroSection() {
     <div className="min-h-screen bg-[#f4f7f6] overflow-x-hidden flex flex-col justify-between select-none">
       
       {/* HEADER */}
-
-      {/* 1. Logo Text (Figma Spec Absolute) */}
       <Link 
-      href="/" 
-      className="
-        absolute 
-        top-[23px] 
-        left-[32px] 
-        w-[69px] 
-        h-[16px] 
-        opacity-100 
-        rotate-0
-        no-underline
-        font-['Roobert_TRIAL',sans-serif] 
-        font-semibold 
-        text-[14px] 
-        leading-[16px] 
-        tracking-[-0.02em] 
-        uppercase 
-        text-[#1A1B1C]
-      "
-    >
-      Skinstric
-    </Link>
-      
-      {/* 2. Intro Wrapper (Figma Spec Absolute) */}
+        href="/" 
+        className="
+          absolute 
+          top-[23px] 
+          left-[32px] 
+          w-[69px] 
+          h-[16px] 
+          opacity-100 
+          rotate-0
+          no-underline
+          font-['Roobert_TRIAL',sans-serif] 
+          font-semibold 
+          text-[14px] 
+          leading-[16px] 
+          tracking-[-0.02em] 
+          uppercase 
+          text-[#1A1B1C]
+        "
+      >
+        Skinstric
+      </Link>
+        
+     
       <div 
         className="
           absolute 
@@ -48,7 +46,7 @@ export default function HeroSection() {
           gap-[6px]
         "
       >
-        {/* Left Bracket Image (Served directly from the public folder) */}
+       
         <Image 
           src="/Rectangle2710.webp"
           alt="left-bracket" 
@@ -58,7 +56,6 @@ export default function HeroSection() {
           className="w-[4px] h-[17px] shrink-0 object-contain" 
         />
 
-        {/* Inner "Intro" Text Element */}
         <span 
           className="
             w-[41px] 
@@ -76,7 +73,6 @@ export default function HeroSection() {
           Intro
         </span>
         
-        {/* Right Bracket Image (Served directly from the public folder) */}
         <Image 
           src="/Rectangle2711.webp"
           alt="right-bracket" 
@@ -87,39 +83,39 @@ export default function HeroSection() {
         />
       </div>
 
-      {/* 3. Right side: Action Button */}
+   
       <button 
-  className="
-    absolute 
-    top-[15px] 
-    right-[32px] 
-    w-[92px] 
-    h-[32px] 
-    bg-[#1A1B1C] 
-    border-none 
-    p-[8px_16px] 
-    flex 
-    items-center 
-    justify-center 
-    text-center 
-    cursor-pointer 
-    
-    font-['Roobert_TRIAL','Segoe_UI',sans-serif] 
-    font-semibold 
-    text-[10px] 
-    leading-[16px] 
-    tracking-[-0.02em] 
-    uppercase 
-    text-[#FCFCFC] 
-    
-    transition-opacity 
-    duration-200 
-    ease-in-out 
-    hover:opacity-90
-  "
->
-  Enter Code
-</button>
+        className="
+          absolute 
+          top-[15px] 
+          right-[32px] 
+          w-[92px] 
+          h-[32px] 
+          bg-[#1A1B1C] 
+          border-none 
+          p-[8px_16px] 
+          flex 
+          items-center 
+          justify-center 
+          text-center 
+          cursor-pointer 
+          
+          font-['Roobert_TRIAL','Segoe_UI',sans-serif] 
+          font-semibold 
+          text-[10px] 
+          leading-[16px] 
+          tracking-[-0.02em] 
+          uppercase 
+          text-[#FCFCFC] 
+          
+          transition-opacity 
+          duration-200 
+          ease-in-out 
+          hover:opacity-90
+        "
+      >
+        Enter Code
+      </button>
 
     
       {/* HERO CONTAINER */}
@@ -140,9 +136,25 @@ export default function HeroSection() {
         </div>
 
         {/* HERO TITLE */}
-        <h2 className="z-20 flex-grow text-center font-['Roobert_TRIAL',_sans-serif] font-light text-[128px] leading-[120px] tracking-[-0.07em] text-[#1A1B1C] max-w-[680px] min-h-[240px]">
-          Sophisticated<br />skincare
-        </h2>
+        <h1 
+          className="font-roobert font-light text-[60px] leading-tight lg:text-[128px] lg:leading-[120px] tracking-[-0.07em] text-[#1A1B1C] text-center opacity-0" 
+          style={{ 
+            opacity: 1, 
+            transform: 'translate(0px, 0px)' 
+          }}
+        >
+          Sophisticated
+          <br />
+          <span 
+            className="block text-[#1A1B1C]" 
+            style={{ 
+              transform: 'translate(0px, 0px)' 
+            }}
+          >
+            skincare
+          </span>
+        </h1>
+
 
         {/* RIGHT SIDE BUTTON & DOTTED DIAMOND */}
         <div className="relative flex items-center justify-end w-[220px] h-[400px] z-10 before:content-[''] before:absolute before:top-0 before:right-[-200px] before:w-[400px] before:h-[400px] before:border-2 before:border-dotted before:border-[#A0A4AB] before:rotate-45 before:-z-10 before:pointer-events-none">

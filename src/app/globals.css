@@ -1,9 +1,45 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-body {
-  background-color: #f8fafc; /* Crisp, neutral slate-50 background */
-  color: #0f172a;
-  font-family: sans-serif;
+@theme {
+  --font-roobert: "Roobert TRIAL", sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: #f8fafc; /* Crisp, neutral slate-50 background */
+    color: #0f172a;
+    font-family: var(--font-roobert), sans-serif; /* Fallback to Roobert globally if desired */
+  }
+}
+
+@font-face {
+  font-family: "Roobert TRIAL";
+  src: url("/fonts/Roobert-Light.woff2") format("woff2"); /* Ensure you have this file */
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roobert TRIAL";
+  src: url("/fonts/Roobert-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roobert TRIAL";
+  src: url("/fonts/Roobert-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roobert TRIAL";
+  src: url("/fonts/Roobert-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
