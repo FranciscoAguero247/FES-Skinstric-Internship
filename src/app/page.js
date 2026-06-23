@@ -1,14 +1,16 @@
-import React from 'react';
+'use client'
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function HeroSection() {
+  const [hoveredButton, setHoveredButton] = useState(null);
+
   return (
     <div className="__className_5f0add antialiased text-[#1A1B1C] min-h-screen flex flex-col justify-between">
       
       {/* 1. HEADER NAVBAR */}
       <div className="flex flex-row h-[64px] w-full justify-between py-3 mb-3 relative z-[1000]">
-        {/* Left Brand + Intro block */}
         <div className="flex flex-row pt-1 scale-75 justify-center items-center">
           <Link 
             className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md transition-colors h-9 px-4 py-2 font-semibold text-sm mr-2 line-clamp-4 leading-[16px] text-[#1A1B1C] z-1000" 
@@ -32,14 +34,12 @@ export default function HeroSection() {
             src="/right-bracket.png"
           />
         </div>
-
-        {/* Right Header Button */}
         <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold transition-colors disabled:pointer-events-none text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 mx-4 scale-[0.8] text-[#FCFCFC] text-[10px] bg-[#1A1B1C] leading-[16px]">
           ENTER CODE
         </button>
       </div>
 
-      {/* 2. MAIN HERO WRAPPER (Handles global mobile scaling) */}
+      {/* MAIN HERO WRAPPER */}
       <div className="max-sm:scale-[0.75] max-sm:origin-center max-sm:p-6 flex-grow">
         <div className="flex flex-col items-center justify-center h-[71dvh] md:fixed md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
           
@@ -52,11 +52,28 @@ export default function HeroSection() {
           </div>
 
           {/* Central Typography Heading */}
-          <div id="main-heading" className="relative z-10 text-center">
-            <h1 className="text-[60px] text-[#1A1B1C] lg:text-[100px] font-inter font-normal tracking-tighter leading-none">
-              Sophisticated<br />
-              <span className="block text-[#1A1B1C]">skincare</span>
-            </h1>
+          <div className="relative z-10 flex justify-center w-full">
+            <div 
+              id="main-heading" 
+              className={`
+                transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] text-left
+                ${hoveredButton === 'test' 
+                  ? '-translate-x-[12vw]' 
+                  : 'translate-x-0'
+                }
+              `}
+            >
+              <h1 className="text-[60px] text-[#1A1B1C] lg:text-[100px] font-inter font-normal tracking-tighter leading-none">
+                Sophisticated
+                <br />
+                <span className={`
+                  block text-[#1A1B1C] transition-transform duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)]
+                  ${hoveredButton === 'test' ? 'translate-x-0' : 'translate-x-[1.7vw] lg:translate-x-[2.5vw]'}
+                `}>
+                  skincare
+                </span>
+              </h1>
+            </div>
           </div>
 
           {/* Mobile Description & CTA (Hidden on desktop) */}
@@ -81,10 +98,24 @@ export default function HeroSection() {
           </div>
 
           {/* LEFT SECTION - DISCOVER A.I. (Desktop Only) */}
-          <div id="left-section" className="hidden lg:block fixed left-[calc(-53vw)] xl:left-[calc(-50vw)] top-1/2 -translate-y-1/2 w-[500px] h-[500px] transition-opacity duration-500 ease-in-out opacity-100">
+          <div 
+            id="left-section" 
+            
+            className={`
+              hidden lg:block fixed left-[calc(-53vw)] xl:left-[calc(-50vw)] top-1/2 -translate-y-1/2 w-[500px] h-[500px] 
+              transition-all duration-500 ease-in-out
+              ${hoveredButton === 'test' ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100'}
+            `}
+          >
             <div className="relative w-full h-full">
               <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 fixed inset-0"></div>
-              <button id="discover-button" className="group inline-flex items-center justify-center gap-4 whitespace-nowrap rounded-md text-sm font-normal text-[#1A1B1C] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer h-9 absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/5 xl:translate-x-1/6 px-3 py-1">
+
+              <button 
+              id="discover-button" 
+              onMouseEnter={() => setHoveredButton('discover')}
+              onMouseLeave={() => setHoveredButton(null)}
+              className="group inline-flex items-center justify-center gap-4 whitespace-nowrap rounded-md text-sm font-normal text-[#1A1B1C] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer h-9 absolute top-1/2 right-0 -translate-y-1/2 translate-x-1/5 xl:translate-x-1/6 px-3 py-1">
+
                 <div className="w-[30px] h-[30px] border border-solid border-black rotate-45 cursor-pointer group-hover:scale-110 duration-300"></div>
                 <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.9] rotate-180 group-hover:scale-105 duration-300 pointer-events-none text-[10px] pl-[117px]">▶</span>
                 <span>DISCOVER A.I.</span>
@@ -92,11 +123,21 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* RIGHT SECTION - TAKE TEST (Desktop Only) */}
-          <div id="right-section" className="hidden lg:block fixed top-1/2 right-[calc(-53vw)] xl:right-[calc(-50vw)] -translate-y-1/2 w-[500px] h-[500px] transition-opacity duration-500 ease-in-out opacity-100">
+          {/* RIGHT SECTION - TAKE TEST (Desktop Only) */}    
+            <div 
+              id="right-section" 
+              
+              className="hidden lg:block fixed top-1/2 right-[calc(-53vw)] xl:right-[calc(-50vw)] -translate-y-1/2 w-[500px] h-[500px]"
+            >
             <div className="relative w-full h-full">
               <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 absolute inset-0"></div>
-              <Link href="/testing">
+              <Link 
+                href="/phase-1"
+                onMouseEnter={() => setHoveredButton('test')}
+                onMouseLeave={() => setHoveredButton(null)}
+                className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/5 xl:-translate-x-1/6 block"
+              
+              >
                 <button id="take-test-button" className="group inline-flex items-center justify-center gap-4 whitespace-nowrap rounded-md text-sm font-normal text-[#1A1B1C] transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer h-9 absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/5 xl:-translate-x-1/6 px-3 py-1">
                   TAKE TEST
                   <div className="w-[30px] h-[30px] border border-solid border-black rotate-45 group-hover:scale-110 duration-300 flex items-center justify-center relative"></div>
