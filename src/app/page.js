@@ -52,29 +52,49 @@ export default function HeroSection() {
           </div>
 
           {/* Central Typography Heading */}
-          <div className="relative z-10 flex justify-center w-full">
+
+
+<div className="relative z-10 flex justify-center w-full overflow-visible">
             <div 
               id="main-heading" 
               className={`
-                transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] text-left
-                ${hoveredButton === 'test' 
-                  ? '-translate-x-[12vw]' 
-                  : 'translate-x-0'
-                }
+                relative z-10 text-center
+                transition-transform duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)]
+                ${hoveredButton === 'test' ? 'md:-translate-x-[7vw]' : ''}
+                ${hoveredButton === 'discover' ? 'md:translate-x-[7vw]' : ''}
+                ${!hoveredButton ? 'translate-x-0' : ''}
               `}
             >
-              <h1 className="text-[60px] text-[#1A1B1C] lg:text-[100px] font-inter font-normal tracking-tighter leading-none">
-                Sophisticated
-                <br />
-                <span className={`
-                  block text-[#1A1B1C] transition-transform duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)]
-                  ${hoveredButton === 'test' ? 'translate-x-0' : 'translate-x-[1.7vw] lg:translate-x-[2.5vw]'}
-                `}>
+              <h1 className="font-inter text-[60px] font-normal leading-none tracking-tighter text-[#1A1B1C] select-none lg:text-[100px]">
+                {/* Line 1: Sophisticated */}
+                <span 
+                  className={`
+                    block transition-transform duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)]
+                    ${hoveredButton === 'test' ? 'md:-translate-x-[2.2vw] lg:-translate-x-[2.8vw]' : ''}
+                    ${hoveredButton === 'discover' ? 'md:translate-x-[2.2vw] lg:translate-x-[2.8vw]' : ''}
+                    ${!hoveredButton ? 'translate-x-0' : ''}
+                  `}
+                >
+                  Sophisticated
+                </span>
+                
+                {/* Line 2: skincare */}
+                <span 
+                  className={`
+                    block text-[#1A1B1C] transition-transform duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)]
+                    ${hoveredButton === 'test' ? 'md:translate-x-[4.8vw] lg:translate-x-[2.8vw]' : ''}
+                    ${hoveredButton === 'discover' ? 'md:-translate-x-[4.8vw] lg:-translate-x-[2.8vw]' : ''}
+                    ${!hoveredButton ? 'translate-x-0' : ''}
+                  `}
+                >
                   skincare
                 </span>
               </h1>
             </div>
           </div>
+
+
+          
 
           {/* Mobile Description & CTA (Hidden on desktop) */}
           <p className="z-10 block lg:hidden w-[30ch] mt-4 text-[16px] font-semibold text-center text-muted-foreground text-[#1a1b1c83]">
@@ -103,7 +123,7 @@ export default function HeroSection() {
             
             className={`
               hidden lg:block fixed left-[calc(-53vw)] xl:left-[calc(-50vw)] top-1/2 -translate-y-1/2 w-[500px] h-[500px] 
-              transition-all duration-500 ease-in-out
+              transition-all duration-[500ms] ease-in-out
               ${hoveredButton === 'test' ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100'}
             `}
           >
@@ -126,8 +146,11 @@ export default function HeroSection() {
           {/* RIGHT SECTION - TAKE TEST (Desktop Only) */}    
             <div 
               id="right-section" 
-              
-              className="hidden lg:block fixed top-1/2 right-[calc(-53vw)] xl:right-[calc(-50vw)] -translate-y-1/2 w-[500px] h-[500px]"
+              className={`
+              hidden lg:block fixed top-1/2 right-[calc(-53vw)] xl:right-[calc(-50vw)] -translate-y-1/2 w-[500px] h-[500px]
+              transition-all duration-[500ms] ease-in-out
+              ${hoveredButton === 'discover' ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100'}
+            `}
             >
             <div className="relative w-full h-full">
               <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 absolute inset-0"></div>
