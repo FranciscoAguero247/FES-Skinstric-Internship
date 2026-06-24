@@ -2,11 +2,24 @@
 
 @theme {
   --font-roobert: "Roobert TRIAL", sans-serif;
+  
+  --animate-slide-right: slideRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @keyframes slideRight {
+    0% {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 }
 
 @layer base {
   body {
-    background-color: #f8fafc; /* Crisp, neutral slate-50 background */
+    background-color: #f8fafc;
     color: #0f172a;
     font-family: var(--font-roobert), sans-serif; /* Fallback to Roobert globally if desired */
   }

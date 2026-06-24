@@ -114,7 +114,7 @@ export default function Phase1Page() {
         {(currentStep === STEPS.NAME || currentStep === STEPS.LOCATION) && (
           <>
             <p className="text-sm text-gray-400 tracking-wider uppercase mb-1 z-10 select-none">
-              WHERE ARE YOU LOCATED?
+              {currentStep === STEPS.NAME ? "Click to type" : "Where are you located?"}
             </p>
 
             <form className="relative z-10" onSubmit={handleFormSubmit}>
@@ -176,58 +176,46 @@ export default function Phase1Page() {
         </div>
       </div>
 
-      <div className="relative bottom-0 left-0 w-full flex justify-between px-9 md:px-13 pb-4 md:pb-8 z-30">
-        {currentStep === STEPS.LOCATION ? (
-          <button 
-            onClick={handleBackAction} 
-            className="group flex items-center focus:outline-none"
-            aria-label="Go Back"
-          >
-            <div className="flex items-center">
-              <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] sm:hidden">
-                <span className="rotate-[-45deg] text-xs font-semibold text-[#1A1B1C]">BACK</span>
-              </div>
-
-              <div className="hidden sm:flex flex-row relative justify-center items-center">
-                <div className="w-12 h-12 flex justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] transform transition-transform duration-300 ease-out group-hover:scale-[0.92]"></div>
-                <span className="absolute left-[15px] bottom-[13px] scale-[0.9] rotate-180 transform transition-transform duration-300 ease-out group-hover:translate-x-[-2px]">
-                  ▶
-                </span>
-                <span className="text-sm font-semibold ml-6 tracking-wide text-[#1A1B1C]">
-                  BACK
-                </span>
-              </div>
+     <div className="absolute bottom-4 w-full flex justify-between px-9 z-30 min-h-[48px] items-center">
+  
+      {/* BACK ACTION: Stays visible through NAME, LOCATION, and LOADING states */}
+      {currentStep !== STEPS.SUCCESS ? (
+        <button 
+                onClick={handleBackAction} 
+                className="group flex items-center focus:outline-none"
+                aria-label="Go Back"
+              >
+          <div className="flex items-center">
+            
+            {/* Mobile View Indicator Shape */}
+            <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
+              <span className="rotate-[-45deg] text-xs font-semibold">BACK</span>
             </div>
-          </button>
-        ) : (
-          currentStep !== STEPS.SUCCESS && (
-            <Link href="/" className="group flex items-center focus:outline-none" aria-label="Back to Home">
-              <div className="flex items-center">
-                <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] sm:hidden">
-                  <span className="rotate-[-45deg] text-xs font-semibold text-[#1A1B1C]">HOME</span>
-                </div>
-                <div className="hidden sm:flex flex-row relative justify-center items-center">
-                  <div className="w-12 h-12 flex justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] transform transition-transform duration-300 ease-out group-hover:scale-[0.92]"></div>
-                  <span className="absolute left-[15px] bottom-[13px] scale-[0.9] rotate-180 transform transition-transform duration-300 ease-out group-hover:translate-x-[-2px]">
-                    ▶
-                  </span>
-                  <span className="text-sm font-semibold ml-6 tracking-wide text-[#1A1B1C]">
-                    HOME
-                  </span>
-                </div>
-              </div>
-            </Link>
-          )
-        )}
+
+            {/* Desktop Dynamic Hover Interface */}
+            <div className="hidden sm:flex flex-row relative justify-center items-center">
+              <div className="w-12 h-12 flex justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] transform transition-transform duration-300 ease-out group-hover:scale-[0.92]"></div>
+              <span className="absolute left-[15px] bottom-[13px] scale-[0.9] rotate-180 transform transition-transform duration-300 ease-out group-hover:translate-x-[-2px]">
+                ▶
+              </span>
+              <span className="text-sm font-semibold ml-6 tracking-wide text-[#1A1B1C]">
+                BACK
+              </span>
+            </div>
+
+          </div>
+        </button>
+      ) : (
+        <div className="w-10"></div> // Layout balance spacer once success renders
+      )}
 
         {currentStep === STEPS.SUCCESS && (
-          <Link href="/phase-2" className="group ml-auto flex items-center focus:outline-none">
+          <Link 
+            href="/phase-2" 
+            className="group ml-auto flex items-center focus:outline-none animate-slide-right"
+          >
             <div className="flex items-center">
-              <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] sm:hidden">
-                <span className="rotate-[-45deg] text-xs font-semibold text-[#1A1B1C]">NEXT</span>
-              </div>
-
-              <div className="hidden sm:flex flex-row relative justify-center items-center">
+              <div className="flex flex-row relative justify-center items-center">
                 <span className="text-sm font-semibold mr-6 tracking-wide text-[#1A1B1C]">
                   PROCEED
                 </span>
