@@ -71,7 +71,7 @@ export default function Phase1Page() {
       setCurrentStep(STEPS.LOADING);
       setInputValue('');
 
-      try {
+     try {
         const response = await fetch('https://us-central1-frontend-simplified.cloudfunctions.net/skinstricPhaseOne', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -79,8 +79,9 @@ export default function Phase1Page() {
         });
         
         const result = await response.json();
-        if (result.SUCCUSS) {
-          setApiResponse(result.SUCCUSS);
+
+        if (result && result.success === true) {
+          setApiResponse(result.message);
           setCurrentStep(STEPS.SUCCESS);
         } else {
           setError('Backend registration failed. Please try again.');
@@ -90,6 +91,7 @@ export default function Phase1Page() {
         setError('Network connectivity error. Re-submitting data...');
         setCurrentStep(STEPS.LOCATION);
       }
+
     }
   };
 
@@ -114,7 +116,7 @@ export default function Phase1Page() {
         {(currentStep === STEPS.NAME || currentStep === STEPS.LOCATION) && (
           <>
             <p className="text-sm text-gray-400 tracking-wider uppercase mb-1 z-10 select-none">
-              CLICK TO TYPE
+              WHERE ARE YOU LOCATED?
             </p>
 
             <form className="relative z-10" onSubmit={handleFormSubmit}>
@@ -122,7 +124,7 @@ export default function Phase1Page() {
                 <input 
                   ref={inputRef}
                   className="text-4xl sm:text-6xl font-normal text-center bg-transparent border-b border-black focus:outline-none appearance-none w-[340px] sm:w-[500px] pt-1 tracking-[-0.07em] leading-[64px] text-[#1A1B1C]" 
-                  placeholder={currentStep === STEPS.NAME ? "Introduce Yourself" : "Where are you located?"} 
+                  placeholder={currentStep === STEPS.NAME ? "Introduce Yourself" : "your city name"}
                   type="text" 
                   autoComplete="off" 
                   value={inputValue}
