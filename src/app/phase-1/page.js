@@ -16,7 +16,6 @@ export default function Phase1Page() {
   const [error, setError] = useState('');
   
   const [userData, setUserData] = useState({ name: '', location: '' });
-  const [apiResponse, setApiResponse] = useState('');
 
   const inputRef = useRef(null);
 
@@ -81,7 +80,6 @@ export default function Phase1Page() {
         const result = await response.json();
 
         if (result && result.success === true) {
-          setApiResponse(result.message);
           setCurrentStep(STEPS.SUCCESS);
         } else {
           setError('Backend registration failed. Please try again.');
@@ -155,18 +153,13 @@ export default function Phase1Page() {
         )}
 
         {currentStep === STEPS.SUCCESS && (
-          <div className="flex flex-col items-center justify-center tracking-tight animate-fade-in z-10">
-            <h2 className="text-5xl sm:text-6xl font-normal tracking-[-0.05em] mb-2 text-[#1A1B1C]">
+          <div className="flex flex-col items-center gap-4 z-10 animate-fade-in">
+            <p className="text-2xl font-normal text-[#1A1B1C] tracking-wide">
               Thank you!
-            </h2>
-            <p className="text-gray-500 text-sm tracking-wide">
-              Proceed for the next step.
             </p>
-            {apiResponse && (
-              <span className="text-[10px] uppercase font-mono mt-4 text-gray-300 tracking-widest bg-gray-50 px-2 py-0.5 rounded">
-                {apiResponse}
-              </span>
-            )}
+            <p className="text-lg text-gray-600">
+              Proceed for the next step
+            </p>
           </div>
         )}
 
