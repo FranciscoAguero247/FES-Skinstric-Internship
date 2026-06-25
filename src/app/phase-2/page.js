@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import Navbar from "@/components/Navbar";
+import Image from 'next/image';
 
 const STEPS = {
   NAME: 'NAME',
@@ -97,64 +98,127 @@ export default function ResultsPage() {
     
       <div className="flex-grow flex flex-col items-center justify-center relative min-h-[700px] md:min-h-[750px] mb-10 mt-10">
         
-        {/* REPLICATED SIGWRAPPED CORE CONTENT DOM CELL */}
-        <div className="flex-[0.4] md:flex-1 flex flex-col md:flex-row items-center xl:justify-center relative mb-0 md:mb-30 space-y-[-20px] md:space-y-0 w-full max-w-7xl h-full">
-          
-          {/* LEFT INTERACTIVE ARTIFACT: ALLOW A.I. TO SCAN YOUR FACE */}
-          <div className="relative md:absolute md:left-[55%] lg:left-[50%] xl:left-[40%] md:-translate-y-[0%] -translate-y-[1%] md:-translate-x-full flex flex-col items-center justify-center z-20">
-            <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px]"></div>
-            
-            {/* DIAMOND RINGS */}
-            <div className="absolute w-[270px] h-[270px] md:w-[482px] md:h-[482px] border border-solid border-gray-200/80 rotate-[200deg] animate-[spin_120s_linear_infinite] pointer-events-none"></div>
-            <div className="absolute w-[230px] h-[230px] md:w-[444.34px] md:h-[444.34px] border border-solid border-gray-300/60 rotate-[190deg] animate-[spin_90s_linear_infinite] pointer-events-none"></div>
-            <div className="absolute w-[190px] h-[190px] md:w-[405.18px] md:h-[405.18px] border border-solid border-gray-400/40 rotate-45 animate-[spin_60s_linear_infinite] pointer-events-none"></div>
+        <div className="flex-[0.4] md:flex-1 flex flex-col md:flex-row items-center xl:justify-center relative mb-0 md:mb-[120px] space-y-[-20px] md:space-y-0 w-full max-w-7xl h-full">
+          <div className="relative md:absolute md:left-[55%] lg:left-[50%] xl:left-[40%] md:-translate-y-0 -translate-y-[1%] md:-translate-x-full flex flex-col items-center justify-center z-20">
+            <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_120s_linear_infinite]">
+              <Image 
+                src="/large-square.png"
+                alt="Outer Decorative Ring"
+                fill
+                className="object-contain"
+              />
+            </div>
+
+            <div className="absolute w-[230px] h-[230px] md:w-[444.34px] md:h-[444.34px] rotate-[190deg] animate-[spin_90s_linear_infinite] pointer-events-none">
+              <Image 
+                src="/medium-square.png"
+                alt="Middle Decorative Ring"
+                fill
+                className="object-contain"
+              />
+            </div>
+
+            <div className="absolute w-[190px] h-[190px] md:w-[405.18px] md:h-[405.18px] rotate-45 animate-[spin_60s_linear_infinite] pointer-events-none">
+              <Image 
+                src="/small-square.png" 
+                alt="Inner Decorative Ring"
+                fill
+                className="object-contain"
+              />
+            </div>
 
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <button 
                 onClick={handleCameraClick}
-                className="absolute w-[100px] h-[100px] md:w-[136px] md:h-[136px] bg-[#F9FBFD] border border-gray-100 flex items-center justify-center rounded-full hover:scale-108 transition-transform duration-700 ease-in-out cursor-pointer shadow-sm z-30 group"
+                className="absolute w-[100px] h-[100px] md:w-[136px] md:h-[136px] flex items-center justify-center hover:scale-105 transition-transform duration-700 ease-in-out cursor-pointer z-30 group"
               >
-                <span className="text-2xl group-hover:rotate-12 transition-transform duration-300">📷</span>
+                <div className="relative w-full h-full group-hover:-translate-y-0.5 transition-transform duration-300">
+                  <Image 
+                    src="/camera.svg" 
+                    alt="Camera Icon"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
               </button>
 
-              <div className="absolute bottom-[1%] right-[90px] md:top-[30.9%] md:right-[-12px] translate-y-[-20px] pointer-events-none text-left">
+              <div className="absolute bottom-[1%] right-[90px] md:top-[30.9%] md:right-[-12px] -translate-y-5 pointer-events-none text-left">
                 <p className="text-xs md:text-sm font-normal mt-1 leading-[24px] tracking-wide text-[#1A1B1C]">
                   ALLOW A.I.<br />TO SCAN YOUR FACE
                 </p>
-                <div className="absolute hidden md:block md:right-[143px] md:top-[20px] w-16 border-t border-dashed border-gray-300"></div>
+                <div className="absolute hidden md:block md:right-[160px] md:top-[5px] w-16 h-16">
+                  <Image 
+                    src="/ResScanLine.svg" 
+                    alt="Face Scan UI"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          {/* RIGHT INTERACTIVE ARTIFACT: ALLOW A.I. ACCESS GALLERY */}
-          <div className="relative md:absolute md:left-[45%] lg:left-[50%] xl:left-[55%] flex flex-col items-center mt-12 md:mt-0 justify-center md:-translate-y-[0%] -translate-y-[10%] transition-opacity duration-300 opacity-100 z-20">
-            <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px]"></div>
-            
-            {/* DIAMOND RINGS */}
-            <div className="absolute w-[270px] h-[270px] md:w-[482px] md:h-[482px] border border-solid border-gray-200/80 rotate-[205deg] animate-[spin_110s_linear_infinite] pointer-events-none"></div>
-            <div className="absolute w-[230px] h-[230px] md:w-[444.34px] md:h-[444.34px] border border-solid border-gray-300/60 rotate-[195deg] animate-[spin_85s_linear_infinite] pointer-events-none"></div>
-            <div className="absolute w-[190px] h-[190px] md:w-[405.18px] md:h-[405.18px] border border-solid border-gray-400/40 rotate-45 animate-[spin_55s_linear_infinite] pointer-events-none"></div>
+          <div className="relative md:absolute md:left-[45%] lg:left-[50%] xl:left-[55%] flex flex-col items-center mt-12 md:mt-0 justify-center md:-translate-y-0 -translate-y-[10%] transition-opacity duration-300 opacity-100 z-20">
+            <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_120s_linear_infinite]">
+              <Image 
+                src="/large-square.png"
+                alt="Outer Decorative Ring"
+                fill
+                className="object-contain"
+              />
+            </div>
+
+            <div className="absolute w-[230px] h-[230px] md:w-[444.34px] md:h-[444.34px] rotate-[190deg] animate-[spin_90s_linear_infinite] pointer-events-none">
+              <Image 
+                src="/medium-square.png"
+                alt="Middle Decorative Ring"
+                fill
+                className="object-contain"
+              />
+            </div>
+
+            <div className="absolute w-[190px] h-[190px] md:w-[405.18px] md:h-[405.18px] rotate-45 animate-[spin_60s_linear_infinite] pointer-events-none">
+              <Image 
+                src="/small-square.png" 
+                alt="Inner Decorative Ring"
+                fill
+                className="object-contain"
+              />
+            </div>
 
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <button 
                 onClick={handleGalleryClick}
-                className="absolute w-[100px] h-[100px] md:w-[136px] md:h-[136px] bg-[#F9FBFD] border border-gray-100 flex items-center justify-center rounded-full hover:scale-108 transition-transform duration-700 ease-in-out cursor-pointer shadow-sm z-30 group"
+                className="absolute w-[100px] h-[100px] md:w-[136px] md:h-[136px] flex items-center justify-center hover:scale-105 transition-transform duration-700 ease-in-out cursor-pointer z-30 group"
               >
-                <span className="text-2xl group-hover:-translate-y-0.5 transition-transform duration-300">📁</span>
+                <div className="relative w-full h-full group-hover:-translate-y-0.5 transition-transform duration-300">
+                  <Image 
+                    src="/gallery-icon.svg" 
+                    alt="Gallery Icon" 
+                    fill
+                    className="object-contain"
+                  />
+                </div>
               </button>
 
-              <div className="absolute top-[75%] md:top-[70%] md:left-[17px] translate-y-[-10px] pointer-events-none text-right md:text-left w-max">
-                <p className="text-[12px] md:text-[14px] font-normal mt-2 leading-[24px] text-right md:text-left tracking-wide text-[#1A1B1C]">
+              <div className="absolute top-[75%] md:top-[70%] md:left-[17px] -translate-y-2 pointer-events-none text-right flex items-center gap-3">
+                <p className="text-[12px] md:text-[14px] font-normal mt-2 leading-[24px] text-right text-[#1A1B1C]">
                   ALLOW A.I.<br />ACCESS GALLERY
                 </p>
-                <div className="absolute hidden md:block md:left-[120px] md:bottom-[39px] w-16 border-t border-dashed border-gray-300"></div>
+                <div className="absolute hidden md:block md:left-[130px] md:bottom-[32px] rotate-180 w-[66px] h-[59px]">
+                  <Image 
+                    src="/ResScanLine.svg" 
+                    alt="Gallery Line"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          {/* PERSISTENT DYNAMIC PREVIEW SUB-LAYOUT HUB */}
-          <div className="absolute top-[-75px] right-7 md:top-[-50px] md:right-8 transition-opacity duration-300 opacity-100 flex flex-col items-end z-40">
-            <h1 className="text-xs md:text-sm font-normal mb-1 tracking-wider text-gray-400 uppercase">Preview</h1>
+          <div className="absolute top-[-75px] right-7 md:top-[-50px] md:right-[-260px] transition-opacity duration-300 opacity-100 flex flex-col items-start z-40">
+            <h1 className="text-xs md:text-sm font-normal mb-1 text-left">Preview</h1>
             <div className="w-24 h-24 md:w-32 md:h-32 border border-solid border-gray-300 bg-gray-50 flex items-center justify-center overflow-hidden shadow-inner relative group">
               {isCameraActive && (
                 <video 
@@ -189,7 +253,6 @@ export default function ResultsPage() {
 
         </div>
 
-        {/* HIDDEN SYSTEM HOOK COMPONENT ATTRIBUTES */}
         <input 
           ref={fileInputRef}
           type="file" 
@@ -198,10 +261,7 @@ export default function ResultsPage() {
           onChange={handleFileChange}
         />
 
-        {/* DYNAMIC DIRECTION FOOTER CONTROLS */}
         <div className="absolute bottom-0 w-full flex justify-between px-9 z-30 items-center">
-          
-          {/* Universal Back Button using the custom logic handler */}
           <button 
             onClick={handleBackAction} 
             className="group flex items-center focus:outline-none"
@@ -224,7 +284,6 @@ export default function ResultsPage() {
             </div>
           </button>
 
-          {/* PROCEED ACTION */}
           {imagePreview && (
             <Link 
               href="/phase-3" 
