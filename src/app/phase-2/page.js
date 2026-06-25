@@ -39,8 +39,15 @@ export default function ResultsPage() {
         throw new Error('Failed to analyze image. Please try again.');
       }
 
+      const data = await response.json();
+
+      const queryParams = new URLSearchParams({
+        status: data.status || 'success',
+        details: JSON.stringify(data.analysis || data)
+      }).toString();
+
       alert("Image analyzed successfully.");
-      router.push('/select'); 
+      router.push(`/select?${queryParams}`);
 
     } catch (err) {
       console.error(err);
