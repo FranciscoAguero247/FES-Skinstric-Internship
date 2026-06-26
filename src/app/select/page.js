@@ -195,7 +195,7 @@ function SelectResultsContent() {
         </button>
 
         <button 
-          onClick={() => router.push('/phase-3')}
+          onClick={() => router.push('/summary')}
           className="group flex items-center focus:outline-none"
         >
           <div className="flex items-center">
