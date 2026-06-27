@@ -18,7 +18,6 @@ function SelectResultsContent() {
   if (rawDetails) {
     try {
       const parsed = JSON.parse(decodeURIComponent(rawDetails));
-      // Extract data property if nested under the standard server object template
       analysisData = parsed.data || parsed;
     } catch (e) {
       console.error("Failed to parse analysis payload matrix structure", e);
@@ -29,7 +28,6 @@ function SelectResultsContent() {
     <div className="relative min-h-screen flex flex-col justify-between antialiased text-[#1A1B1C] bg-white overflow-hidden">
       <Navbar />
 
-      {/* TOP HEADER STATUS CONTEXT */}
       <div className="absolute top-10 left-8 text-left mt-5 z-20">
         <h1 className="text-base font-semibold leading-[24px] tracking-tight">
           A.I. ANALYSIS
@@ -40,17 +38,12 @@ function SelectResultsContent() {
         </p>
       </div>
 
-      {/* DIAMOND INTERFACE CONTAINER */}
       <div className="flex-grow flex items-center justify-center z-10 my-24">
         {analysisData ? (
           <div className="relative w-[550px] h-[550px] flex items-center justify-center">
             
-            {/* =========================================================================
-                BACKGROUND DIAMONDS (ISOLATED LAYERS CONTROLLED BY STATE)
-                ========================================================================= */}
             <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center overflow-visible">
               
-              {/* 1. SMALL DIAMOND -> Demographics */}
               <div 
                 className={`absolute w-[460px] h-[460px] transition-all duration-500 ease-out ${
                   hoveredNode === 'demo' ? 'opacity-100 scale-130' : 'opacity-0 scale-95'
@@ -66,7 +59,6 @@ function SelectResultsContent() {
                 />
               </div>
 
-              {/* 2. MEDIUM DIAMOND (Instance A) -> Cosmetic Concerns */}
               <div 
                 className={`absolute w-[490px] h-[490px] transition-all duration-500 ease-out ${
                   hoveredNode === 'cosmetic' ? 'opacity-100 scale-140' : 'opacity-0 scale-95'
@@ -82,7 +74,6 @@ function SelectResultsContent() {
                 />
               </div>
 
-              {/* 3. MEDIUM DIAMOND (Instance B) -> Skin Type Details */}
               <div 
                 className={`absolute w-[490px] h-[490px] transition-all duration-500 ease-out ${
                   hoveredNode === 'skintype' ? 'opacity-100 scale-140' : 'opacity-0 scale-95'
@@ -98,7 +89,6 @@ function SelectResultsContent() {
                 />
               </div>
 
-              {/* 4. LARGE DIAMOND -> Weather */}
               <div 
                 className={`absolute w-[520px] h-[520px] transition-all duration-500 ease-out ${
                   hoveredNode === 'weather' ? 'opacity-100 scale-160' : 'opacity-0 scale-95'
@@ -116,25 +106,20 @@ function SelectResultsContent() {
 
             </div>
 
-            {/* =========================================================================
-                INTERACTIVE GRID LAYER
-                ========================================================================= */}
             <div className="relative z-10 grid grid-cols-3 grid-rows-3 gap-0">
               
-              {/* Demographics Node */}
               <div 
                 className="flex items-center justify-center col-start-2"
                 onMouseEnter={() => setHoveredNode('demo')}
                 onMouseLeave={() => setHoveredNode(null)}
               >
-                <Link href={`/summary${detailsQuery}`} passHref legacyBehavior>
+                <Link href={`/summary${detailsQuery}`}>
                   <button className="w-[153.88px] h-[153.88px] bg-gray-200 hover:bg-gray-300 transform rotate-45 flex items-center justify-center -m-5 cursor-pointer font-semibold leading-[24px] tracking-tight uppercase hover:scale-[1.05] transition-transform duration-300">
                     <span className="transform -rotate-45">Demographics</span>
                   </button>
                 </Link>
               </div>
 
-              {/* Cosmetic Concerns Node */}
               <div 
                 className="flex items-center justify-center row-start-2 col-start-1"
                 onMouseEnter={() => setHoveredNode('cosmetic')}
@@ -145,7 +130,6 @@ function SelectResultsContent() {
                 </button>
               </div>
 
-              {/* Skin Type Details Node */}
               <div 
                 className="flex items-center justify-center row-start-2 col-start-3"
                 onMouseEnter={() => setHoveredNode('skintype')}
@@ -156,7 +140,6 @@ function SelectResultsContent() {
                 </button>
               </div>
 
-              {/* Weather Node */}
               <div 
                 className="flex items-center justify-center row-start-3 col-start-2"
                 onMouseEnter={() => setHoveredNode('weather')}
@@ -176,10 +159,9 @@ function SelectResultsContent() {
         )}
       </div>
 
-      {/* LOWER FOOTER ACTION ROW */}
       <div className="w-full flex justify-between px-9 pb-8 z-30 items-center">
         <button 
-          onClick={() => router.push(`/phase-2${detailsQuery}`)} 
+          onClick={() => router.push(`/result${detailsQuery}`)} 
           className="group flex items-center focus:outline-none"
           aria-label="Re-scan skin image"
         >

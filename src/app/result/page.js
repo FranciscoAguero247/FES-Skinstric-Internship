@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useImage } from '@/context/ImageContext';
 import Navbar from "@/components/Navbar";
 import Image from 'next/image';
+import Link from 'next/link';
 
 const STEPS = {
   NAME: 'NAME',
@@ -23,16 +24,21 @@ export default function ResultsPage() {
   const fileInputRef = useRef(null);
   const videoRef = useRef(null);
 
-  // Sync state if context already contains a valid image string
   useEffect(() => {
     if (imageBase64) {
       setImagePreview(imageBase64);
     }
   }, [imageBase64]);
 
+  useEffect(() => {
+    return () => {
+      stopCamera();
+    };
+  }, []);
+
   const processImageAndAnalyze = async (imageDataUrl) => {
     setImagePreview(imageDataUrl);
-    saveImage(imageDataUrl); // Persist global state instantly
+    saveImage(imageDataUrl); 
     setIsLoading(true);
     setError('');
 
@@ -62,7 +68,6 @@ export default function ResultsPage() {
     } catch (err) {
       console.error(err);
       setError(err.message || 'Something went wrong during analysis.');
-      alert(err.message || 'Something went wrong during analysis.');
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +92,9 @@ export default function ResultsPage() {
       const reader = new FileReader();
       reader.onloadend = () => {
         stopCamera(); 
-        processImageAndAnalyze(reader.result);
+        if (typeof reader.result === 'string') {
+          processImageAndAnalyze(reader.result);
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -96,6 +103,7 @@ export default function ResultsPage() {
   const handleCameraClick = async () => {
     setImagePreview(null);
     setIsCameraActive(true);
+    setError('');
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
       if (videoRef.current) {
@@ -104,7 +112,7 @@ export default function ResultsPage() {
     } catch (err) {
       console.error("Camera access denied or unavailable:", err);
       setIsCameraActive(false);
-      alert("Could not access camera device. Please try uploading via Gallery instead.");
+      setError("Could not access camera device. Please try uploading via Gallery instead.");
     }
   };
 
@@ -228,9 +236,8 @@ export default function ResultsPage() {
             </div>
           </div>
         ) : (
-          <div className="flex-[0.4] md:flex-1 flex flex-col md:flex-row items-center xl:justify-center relative mb-0 md:mb-[120px] space-y-[-20px] md:space-y-0 w-full max-w-7xl h-full">
-            
-            <div className="relative md:absolute md:left-[55%] lg:left-[50%] xl:left-[40%] md:-translate-y-0 -translate-y-[1%] md:-translate-x-full flex flex-col items-center justify-center z-20">
+          <div className="flex-[0.4] md:flex-1 flex flex-col md:flex-row items-center xl:justify-center relative mb-0 md:mb-[120px] space-y-4 md:space-y-0 w-full max-w-7xl h-full">
+            <div className="relative md:absolute md:left-[55%] lg:left-[50%] xl:left-[40%] md:-translate-y-0 flex flex-col items-center justify-center z-20 md:-translate-x-full">
               <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_120s_linear_infinite]">
                 <Image 
                   src="/large-square.png"
@@ -261,6 +268,7 @@ export default function ResultsPage() {
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <button 
                   onClick={handleCameraClick}
+                  aria-label="Scan face with camera"
                   className="absolute w-[100px] h-[100px] md:w-[136px] md:h-[136px] flex items-center justify-center hover:scale-105 transition-transform duration-700 ease-in-out cursor-pointer z-30 group"
                 >
                   <div className="relative w-full h-full group-hover:-translate-y-0.5 transition-transform duration-300">
@@ -289,7 +297,7 @@ export default function ResultsPage() {
               </div>
             </div>
 
-            <div className="relative md:absolute md:left-[45%] lg:left-[50%] xl:left-[55%] flex flex-col items-center mt-12 md:mt-0 justify-center md:-translate-y-0 -translate-y-[10%] transition-opacity duration-300 opacity-100 z-20">
+            <div className="relative md:absolute md:left-[45%] lg:left-[50%] xl:left-[55%] flex flex-col items-center mt-12 md:mt-0 justify-center transition-opacity duration-300 opacity-100 z-20">
               <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_120s_linear_infinite]">
                 <Image 
                   src="/large-square.png"
@@ -320,6 +328,7 @@ export default function ResultsPage() {
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <button 
                   onClick={handleGalleryClick}
+                  aria-label="Upload from gallery"
                   className="absolute w-[100px] h-[100px] md:w-[136px] md:h-[136px] flex items-center justify-center hover:scale-105 transition-transform duration-700 ease-in-out cursor-pointer z-30 group"
                 >
                   <div className="relative w-full h-full group-hover:-translate-y-0.5 transition-transform duration-300">
@@ -360,28 +369,29 @@ export default function ResultsPage() {
         />
 
         <div className="absolute bottom-0 w-full flex justify-between px-9 z-30 items-center">
-          <button 
-            onClick={handleBackAction} 
-            disabled={isLoading}
-            className={`group flex items-center focus:outline-none ${isLoading ? 'opacity-30 pointer-events-none' : ''}`}
-            aria-label="Go Back"
-          >
-            <div className="flex items-center">
-              <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
-                <span className="rotate-[-45deg] text-xs font-semibold">BACK</span>
-              </div>
+          <Link href="/testing">
+            <button
+              disabled={isLoading}
+              className={`group flex items-center focus:outline-none ${isLoading ? 'opacity-30 pointer-events-none' : ''}`}
+              aria-label="Go Back"
+            >
+              <div className="flex items-center">
+                <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
+                  <span className="rotate-[-45deg] text-xs font-semibold">BACK</span>
+                </div>
 
-              <div className="hidden sm:flex flex-row relative justify-center items-center">
-                <div className="w-12 h-12 flex justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] transform transition-transform duration-300 ease-out group-hover:scale-[0.92]"></div>
-                <span className="absolute left-[15px] bottom-[13px] scale-[0.9] rotate-180 transform transition-transform duration-300 ease-out group-hover:translate-x-[-2px]">
-                  ▶
-                </span>
-                <span className="text-sm font-semibold ml-6 tracking-wide text-[#1A1B1C]">
-                  BACK
-                </span>
+                <div className="hidden sm:flex flex-row relative justify-center items-center">
+                  <div className="w-12 h-12 flex justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] transform transition-transform duration-300 ease-out group-hover:scale-[0.92]"></div>
+                  <span className="absolute left-[15px] bottom-[13px] scale-[0.9] rotate-180 transform transition-transform duration-300 ease-out group-hover:translate-x-[-2px]">
+                    ▶
+                  </span>
+                  <span className="text-sm font-semibold ml-6 tracking-wide text-[#1A1B1C]">
+                    BACK
+                  </span>
+                </div>
               </div>
-            </div>
-          </button>
+            </button>
+          </Link>
         </div>
 
       </div>

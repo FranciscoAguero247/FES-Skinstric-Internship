@@ -110,7 +110,7 @@ export default function HeroSection() {
             <div className="relative w-full h-full">
               <div className="w-full h-full border border-dotted border-[#A0A4AB] rotate-45 absolute inset-0"></div>
               <Link 
-                href="/phase-1"
+                href="/testing"
                 onMouseEnter={() => setHoveredButton('test')}
                 onMouseLeave={() => setHoveredButton(null)}
                 className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-1/5 xl:-translate-x-1/6 block"
