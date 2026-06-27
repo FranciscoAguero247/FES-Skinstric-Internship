@@ -1,42 +1,71 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 
-// Dynamic datasets for various views
-const dynamicData = {
-  RACE: [
-    { name: 'Middle eastern', percentage: 56 },
-    { name: 'South asian', percentage: 17 },
-    { name: 'White', percentage: 14 },
-    { name: 'Black', percentage: 5 },
-    { name: 'Latino hispanic', percentage: 4 },
-    { name: 'Southeast asian', percentage: 2 },
-    { name: 'East asian', percentage: 0 },
-  ],
-  AGE: [
-    { name: '18-29', percentage: 12 },
-    { name: '30-39', percentage: 22 },
-    { name: '40-49', percentage: 15 },
-    { name: '50-59', percentage: 43 },
-    { name: '60+', percentage: 8 },
-  ],
-  SEX: [
-    { name: 'MALE', percentage: 88 },
-    { name: 'FEMALE', percentage: 12 },
-  ],
-};
+function DemographicsAnalysisContent() {
+  const searchParams = useSearchParams();
 
-export default function DemographicsAnalysis() {
-  // 1. Core navigation category tracking ('RACE' | 'AGE' | 'SEX')
+  // 1. Safely parse incoming payload data matrix
+  const rawDetails = searchParams.get('details');
+  let apiData = null;
+
+  if (rawDetails) {
+    try {
+      const parsed = JSON.parse(decodeURIComponent(rawDetails));
+      // Support nested templates under .data or flat objects
+      apiData = parsed.data || parsed;
+    } catch (e) {
+      console.error("Failed to decode analytics payload", e);
+    }
+  }
+
+  // 2. Map API decimals into rounded percentages for your visual lists
+  const formatDataset = (apiSubObject) => {
+    if (!apiSubObject) return [];
+    return Object.entries(apiSubObject)
+      .map(([name, probability]) => ({
+        name: name, // keeps exact string casing from API
+        percentage: Math.round(probability * 100)
+      }))
+      // Sort highest confidence first to look professional
+      .sort((a, b) => b.percentage - a.percentage);
+  };
+
+  const dynamicData = {
+    RACE: formatDataset(apiData?.race).length ? formatDataset(apiData?.race) : [
+      { name: 'Middle eastern', percentage: 0 },
+      { name: 'South asian', percentage: 0 },
+      { name: 'White', percentage: 0 },
+      { name: 'Black', percentage: 0 },
+      { name: 'Latino hispanic', percentage: 0 },
+      { name: 'Southeast asian', percentage: 0 },
+      { name: 'East asian', percentage: 0 },
+    ],
+    AGE: formatDataset(apiData?.age).length ? formatDataset(apiData?.age) : [
+      { name: '20-29', percentage: 0 },
+      { name: '30-39', percentage: 0 },
+      { name: '40-49', percentage: 0 },
+    ],
+    SEX: formatDataset(apiData?.gender).length ? formatDataset(apiData?.gender) : [
+      { name: 'male', percentage: 0 },
+      { name: 'female', percentage: 0 },
+    ],
+  };
+
+  // Helper to extract top prediction key as initial selection fallback
+  const getTopKey = (dataset) => dataset[0]?.name || '';
+
+  // Core navigation category tracking ('RACE' | 'AGE' | 'SEX')
   const [activeTab, setActiveTab] = useState('RACE');
 
-  // 2. Active selection states per analysis category
+  // Active selection states initialized dynamically to the top API predictions
   const [selections, setSelections] = useState({
-    RACE: 'Middle eastern',
-    AGE: '50-59',
-    SEX: 'MALE',
+    RACE: getTopKey(dynamicData.RACE) || 'Middle eastern',
+    AGE: getTopKey(dynamicData.AGE) || '30-39',
+    SEX: getTopKey(dynamicData.SEX) || 'female',
   });
 
   const currentDataset = dynamicData[activeTab];
@@ -44,7 +73,7 @@ export default function DemographicsAnalysis() {
   
   // Find current confidence level to map directly to the circular dashboard graphic
   const currentMetric = currentDataset.find(item => item.name === activeSelectionName) || currentDataset[0];
-  const activePercentage = currentMetric.percentage;
+  const activePercentage = currentMetric ? currentMetric.percentage : 0;
 
   // Formula to calculate SVG circle fill progress offset: Total circumference is ~308.819px
   const maxStrokeOffset = 308.819;
@@ -77,7 +106,7 @@ export default function DemographicsAnalysis() {
                 activeTab === 'RACE' ? 'bg-[#1A1B1C] text-white' : 'bg-[#F3F3F4] text-[#1A1B1C] hover:bg-[#E1E1E2]'
               }`}
             >
-              <p className="text-base font-semibold">{selections.RACE}</p>
+              <p className="text-base font-semibold capitalize">{selections.RACE}</p>
               <h4 className={`text-base font-semibold mb-1 ${activeTab === 'RACE' ? 'text-slate-400' : 'text-slate-500'}`}>RACE</h4>
             </button>
             <button 
@@ -95,14 +124,14 @@ export default function DemographicsAnalysis() {
                 activeTab === 'SEX' ? 'bg-[#1A1B1C] text-white' : 'bg-[#F3F3F4] text-[#1A1B1C] hover:bg-[#E1E1E2]'
               }`}
             >
-              <p className="text-base font-semibold">{selections.SEX}</p>
+              <p className="text-base font-semibold uppercase">{selections.SEX}</p>
               <h4 className={`text-base font-semibold mb-1 ${activeTab === 'SEX' ? 'text-slate-400' : 'text-slate-500'}`}>SEX</h4>
             </button>
           </div>
 
           {/* Center Column: Interactive Circular Progress Ring */}
           <div className="relative bg-gray-100 p-4 flex flex-col items-center justify-center md:h-[57vh] md:border-t">
-            <p className="hidden md:block md:absolute text-[40px] mb-2 left-5 top-2 font-normal">
+            <p className="hidden md:block md:absolute text-[40px] mb-2 left-5 top-2 font-normal capitalize">
               {activeSelectionName}
             </p>
             
@@ -145,7 +174,7 @@ export default function DemographicsAnalysis() {
               <h4 className="text-xs uppercase tracking-wider leading-[24px] font-semibold text-slate-500">A.I. CONFIDENCE</h4>
             </div>
 
-            <div className="space-y-0.5 mt-2">
+            <div className="space-y-0.5 mt-2 overflow-y-auto max-h-[45vh]">
               {currentDataset.map((item) => {
                 const isActive = item.name === activeSelectionName;
                 return (
@@ -159,28 +188,15 @@ export default function DemographicsAnalysis() {
                     }`}
                   >
                     <div className="flex items-center gap-1">
-                      {isActive ? (
-                        <img
-                          alt="radio button"
-                          loading="lazy"
-                          width="12"
-                          height="12"
-                          className="w-[12px] h-[12px] mr-2"
-                          src="/selected-button.png"
-                          style={{ color: 'transparent' }}
-                        />
-                      ) : (
-                        <img
-                          alt="radio button"
-                          loading="lazy"
-                          width="12"
-                          height="12"
-                          className="w-[12px] h-[12px] mr-2"
-                          src="/unselected-button.png"
-                          style={{ color: 'transparent' }}
-                        />
-                      )}
-                      <span className="font-normal text-base leading-6 tracking-tight">{item.name}</span>
+                      <img
+                        alt="radio button"
+                        loading="lazy"
+                        width="12"
+                        height="12"
+                        className="w-[12px] h-[12px] mr-2"
+                        src={isActive ? "/selected-button.png" : "/unselected-button.png"}
+                      />
+                      <span className="font-normal text-base leading-6 tracking-tight capitalize">{item.name}</span>
                     </div>
                     <span className="font-normal text-base leading-6 tracking-tight">{item.percentage}%</span>
                   </div>
@@ -195,7 +211,7 @@ export default function DemographicsAnalysis() {
         <div className="pt-4 md:pt-[37px] pb-6 bg-white sticky bottom-40 md:static md:bottom-0 mb-8 md:mb-16">
           <div className="flex justify-between max-w-full mx-auto px-4 md:px-0">
             
-            <Link href="/select" className="focus:outline-none">
+            <Link href={`/select?details=${encodeURIComponent(rawDetails || '')}`} className="focus:outline-none">
               <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-100 sm:hidden">
                 <span className="rotate-[-45deg] text-xs font-semibold">BACK</span>
               </div>
@@ -222,5 +238,17 @@ export default function DemographicsAnalysis() {
 
       </div>
     </main>
+  );
+}
+
+export default function DemographicsAnalysis() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white flex items-center justify-center font-mono text-xs uppercase tracking-widest text-[#1A1B1C]">
+        Loading Demographics Report Matrix...
+      </div>
+    }>
+      <DemographicsAnalysisContent />
+    </Suspense>
   );
 }

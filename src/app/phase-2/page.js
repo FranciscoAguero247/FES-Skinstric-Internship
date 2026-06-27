@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useImage } from '@/context/ImageContext';
 import Navbar from "@/components/Navbar";
 import Image from 'next/image';
 
@@ -12,6 +13,7 @@ const STEPS = {
 
 export default function ResultsPage() {
   const router = useRouter();
+  const { saveImage, imageBase64 } = useImage();
   const [currentStep, setCurrentStep] = useState(STEPS.LOCATION);
   const [error, setError] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
@@ -21,8 +23,16 @@ export default function ResultsPage() {
   const fileInputRef = useRef(null);
   const videoRef = useRef(null);
 
+  // Sync state if context already contains a valid image string
+  useEffect(() => {
+    if (imageBase64) {
+      setImagePreview(imageBase64);
+    }
+  }, [imageBase64]);
+
   const processImageAndAnalyze = async (imageDataUrl) => {
     setImagePreview(imageDataUrl);
+    saveImage(imageDataUrl); // Persist global state instantly
     setIsLoading(true);
     setError('');
 
@@ -146,7 +156,7 @@ export default function ResultsPage() {
               className="w-full h-full object-cover scale-x-[-1]"
             />
           )}
-          {imagePreview && (
+          {imagePreview && !isCameraActive && (
             <img 
               src={imagePreview} 
               alt="User capture" 
