@@ -134,6 +134,41 @@ export default function ResultsPage() {
           TO START ANALYSIS
         </p>
       </div>
+
+      <div className="absolute top-24 right-9 md:top-24 md:right-24 flex flex-col items-start z-50">
+        <h1 className="text-xs md:text-sm font-normal mb-1 text-left">Preview</h1>
+        <div className="w-24 h-24 md:w-32 md:h-32 border border-solid border-gray-300 bg-gray-50 flex items-center justify-center overflow-hidden shadow-inner relative group">
+          {isCameraActive && (
+            <video 
+              ref={videoRef} 
+              autoPlay 
+              playsInline 
+              className="w-full h-full object-cover scale-x-[-1]"
+            />
+          )}
+          {imagePreview && (
+            <img 
+              src={imagePreview} 
+              alt="User capture" 
+              className="w-full h-full object-cover"
+            />
+          )}
+          {!isCameraActive && !imagePreview && (
+            <span className="text-[9px] font-medium text-gray-300 tracking-tight text-center px-1 select-none">
+              NO LIVE FEED
+            </span>
+          )}
+          {isCameraActive && !isLoading && (
+            <button 
+              onClick={capturePhoto}
+              className="absolute bottom-1 left-1/2 -translate-x-1/2 bg-red-500 hover:bg-red-600 active:scale-95 text-white font-bold text-[8px] px-2 py-0.5 tracking-wide uppercase transition-all shadow-md rounded"
+            >
+              SNAP
+            </button>
+          )}
+        </div>
+        {error && <p className="text-[10px] text-red-500 mt-1 max-w-[120px]">{error}</p>}
+      </div>
     
       <div className="flex-grow flex flex-col items-center justify-center relative min-h-[700px] md:min-h-[750px] mb-10 mt-10">
         
@@ -141,7 +176,7 @@ export default function ResultsPage() {
           <div className="flex flex-col items-center justify-center relative w-full h-full min-h-[500px]">
             <div className="relative flex flex-col items-center justify-center">
               
-              <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_120s_linear_infinite]">
+              <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_20s_linear_infinite]">
                 <Image 
                   src="/large-square.png"
                   alt="Outer Decorative Ring"
@@ -150,7 +185,7 @@ export default function ResultsPage() {
                 />
               </div>
 
-              <div className="absolute w-[230px] h-[230px] md:w-[444.34px] md:h-[444.34px] rotate-[190deg] animate-[spin_90s_linear_infinite] pointer-events-none">
+              <div className="absolute w-[230px] h-[230px] md:w-[444.34px] md:h-[444.34px] rotate-[190deg] animate-[spin_15s_linear_infinite] pointer-events-none">
                 <Image 
                   src="/medium-square.png"
                   alt="Middle Decorative Ring"
@@ -159,7 +194,7 @@ export default function ResultsPage() {
                 />
               </div>
 
-              <div className="absolute w-[190px] h-[190px] md:w-[405.18px] md:h-[405.18px] rotate-45 animate-[spin_60s_linear_infinite] pointer-events-none">
+              <div className="absolute w-[190px] h-[190px] md:w-[405.18px] md:h-[405.18px] rotate-45 animate-[spin_10s_linear_infinite] pointer-events-none">
                 <Image 
                   src="/small-square.png" 
                   alt="Inner Decorative Ring"
@@ -168,10 +203,16 @@ export default function ResultsPage() {
                 />
               </div>
 
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <p className="text-xs md:text-sm font-semibold tracking-widest text-[#1A1B1C] text-center uppercase">
                   PREPARING YOUR ANALYSIS
                 </p>
+
+                <div className="flex space-x-1 mt-2.5">
+                  <span className="w-1.5 h-1.5 bg-[#1A1B1C] rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                  <span className="w-1.5 h-1.5 bg-[#1A1B1C] rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                  <span className="w-1.5 h-1.5 bg-[#1A1B1C] rounded-full animate-bounce"></span>
+                </div>
               </div>
 
             </div>
@@ -179,7 +220,6 @@ export default function ResultsPage() {
         ) : (
           <div className="flex-[0.4] md:flex-1 flex flex-col md:flex-row items-center xl:justify-center relative mb-0 md:mb-[120px] space-y-[-20px] md:space-y-0 w-full max-w-7xl h-full">
             
-            {/* Left Scanner Component (Camera) */}
             <div className="relative md:absolute md:left-[55%] lg:left-[50%] xl:left-[40%] md:-translate-y-0 -translate-y-[1%] md:-translate-x-full flex flex-col items-center justify-center z-20">
               <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_120s_linear_infinite]">
                 <Image 
@@ -296,41 +336,6 @@ export default function ResultsPage() {
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div className="absolute top-[-75px] right-7 md:top-[-50px] md:right-[-260px] transition-opacity duration-300 opacity-100 flex flex-col items-start z-40">
-              <h1 className="text-xs md:text-sm font-normal mb-1 text-left">Preview</h1>
-              <div className="w-24 h-24 md:w-32 md:h-32 border border-solid border-gray-300 bg-gray-50 flex items-center justify-center overflow-hidden shadow-inner relative group">
-                {isCameraActive && (
-                  <video 
-                    ref={videoRef} 
-                    autoPlay 
-                    playsInline 
-                    className="w-full h-full object-cover scale-x-[-1]"
-                  />
-                )}
-                {imagePreview && (
-                  <img 
-                    src={imagePreview} 
-                    alt="User capture" 
-                    className="w-full h-full object-cover"
-                  />
-                )}
-                {!isCameraActive && !imagePreview && (
-                  <span className="text-[9px] font-medium text-gray-300 tracking-tight text-center px-1 select-none">
-                    NO LIVE FEED
-                  </span>
-                )}
-                {isCameraActive && (
-                  <button 
-                    onClick={capturePhoto}
-                    className="absolute bottom-1 left-1/2 -translate-x-1/2 bg-red-500 hover:bg-red-600 active:scale-95 text-white font-bold text-[8px] px-2 py-0.5 tracking-wide uppercase transition-all shadow-md rounded"
-                  >
-                    SNAP
-                  </button>
-                )}
-              </div>
-              {error && <p className="text-[10px] text-red-500 mt-1 max-w-[120px]">{error}</p>}
             </div>
 
           </div>
