@@ -3,7 +3,6 @@
 import React, { Suspense, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import Navbar from "@/components/Navbar";
 import DecorativeRings from '@/components/DecorativeRings';
 

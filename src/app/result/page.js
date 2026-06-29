@@ -6,7 +6,6 @@ import { useImage } from '@/context/ImageContext';
 import Navbar from "@/components/Navbar";
 import DecorativeRings from "@/components/DecorativeRings";
 import Image from 'next/image';
-import Link from 'next/link';
 
 const STEPS = {
   NAME: 'NAME',
@@ -24,6 +23,8 @@ export default function ResultsPage() {
 
   const fileInputRef = useRef(null);
   const videoRef = useRef(null);
+  const streamRef = useRef(null);
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
     if (imageBase64) {
@@ -32,8 +33,24 @@ export default function ResultsPage() {
   }, [imageBase64]);
 
   useEffect(() => {
-    return () => {
+    isMountedRef.current = true;
+    const handleCleanup = (event) => {
+      if (event?.type === 'visibilitychange' && document.visibilityState !== 'hidden') {
+        return;
+      }
       stopCamera();
+    };
+
+    window.addEventListener('pagehide', handleCleanup);
+    document.addEventListener('visibilitychange', handleCleanup);
+    window.addEventListener('popstate', handleCleanup);
+
+    return () => {
+      isMountedRef.current = false;
+      stopCamera(); 
+      window.removeEventListener('pagehide', handleCleanup);
+      document.removeEventListener('visibilitychange', handleCleanup);
+      window.removeEventListener('popstate', handleCleanup);
     };
   }, []);
 
@@ -63,14 +80,20 @@ export default function ResultsPage() {
         details: JSON.stringify(data.analysis || data)
       }).toString();
 
-      alert("Image analyzed successfully.");
-      router.push(`/select?${queryParams}`);
-
+      if (isMountedRef.current){
+        alert("Image analyzed successfully.");
+      router.push(`/select?${queryParams}`);  
+      }
+      
     } catch (err) {
-      console.error(err);
-      setError(err.message || 'Something went wrong during analysis.');
+      if (isMountedRef.current){
+        console.error(err);
+        setError(err.message || 'Something went wrong during analysis.');
+      }
     } finally {
-      setIsLoading(false);
+      if (isMountedRef.current){
+        setIsLoading(false);
+      }
     }
   };
 
@@ -102,11 +125,16 @@ export default function ResultsPage() {
   };
 
   const handleCameraClick = async () => {
+    if(isCameraActive || streamRef.current || isLoading) return;
+
     setImagePreview(null);
     setIsCameraActive(true);
     setError('');
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+      
+      streamRef.current = stream;
+      
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
@@ -135,12 +163,19 @@ export default function ResultsPage() {
   };
 
   const stopCamera = () => {
-    if (videoRef.current && videoRef.current.srcObject) {
-      const stream = videoRef.current.srcObject;
+    const stream = streamRef.current || videoRef.current?.srcObject;
+
+    if (stream) {
       const tracks = stream.getTracks();
-      tracks.forEach(track => track.stop());
+      tracks.forEach(track => {
+        track.stop();
+      });
+    }
+
+    if (videoRef.current) {
       videoRef.current.srcObject = null;
     }
+    streamRef.current = null;
     setIsCameraActive(false);
   };
 
@@ -299,9 +334,13 @@ export default function ResultsPage() {
         />
 
         <div className="absolute bottom-0 w-full flex justify-between px-9 z-30 items-center">
-          <Link href="/testing">
+          
             <button
               disabled={isLoading}
+              onClick={()=>{
+                stopCamera();
+                router.push('/testing');
+              }}
               className={`group flex items-center focus:outline-none ${isLoading ? 'opacity-30 pointer-events-none' : ''}`}
               aria-label="Go Back"
             >
@@ -321,7 +360,7 @@ export default function ResultsPage() {
                 </div>
               </div>
             </button>
-          </Link>
+          
         </div>
 
       </div>
