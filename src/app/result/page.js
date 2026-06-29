@@ -194,11 +194,13 @@ export default function ResultsPage() {
           <div className="flex flex-col items-center justify-center relative w-full h-full min-h-[500px]">
             <div className="relative flex flex-col items-center justify-center">
               
-              <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_20s_linear_infinite]">
-                <Image 
+              <div className="relative w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_20s_linear_infinite]">
+                <Image
                   src="/large-square.png"
                   alt="Outer Decorative Ring"
                   fill
+                  priority
+                  sizes="(max-width: 768px) 270px, 482px"
                   className="object-contain"
                 />
               </div>
@@ -208,6 +210,8 @@ export default function ResultsPage() {
                   src="/medium-square.png"
                   alt="Middle Decorative Ring"
                   fill
+                  priority
+                  sizes="(max-width: 768px) 230px, 444.34px"
                   className="object-contain"
                 />
               </div>
@@ -217,6 +221,8 @@ export default function ResultsPage() {
                   src="/small-square.png" 
                   alt="Inner Decorative Ring"
                   fill
+                  priority
+                  sizes="(max-width: 768px) 190px, 405.18px"
                   className="object-contain"
                 />
               </div>
@@ -238,11 +244,13 @@ export default function ResultsPage() {
         ) : (
           <div className="flex-[0.4] md:flex-1 flex flex-col md:flex-row items-center xl:justify-center relative mb-0 md:mb-[120px] space-y-4 md:space-y-0 w-full max-w-7xl h-full">
             <div className="relative md:absolute md:left-[55%] lg:left-[50%] xl:left-[40%] md:-translate-y-0 flex flex-col items-center justify-center z-20 md:-translate-x-full">
-              <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_120s_linear_infinite]">
+              <div className="relative w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_120s_linear_infinite]">
                 <Image 
                   src="/large-square.png"
                   alt="Outer Decorative Ring"
                   fill
+                  priority
+                  sizes="(max-width: 768px) 270px, 482px"
                   className="object-contain"
                 />
               </div>
@@ -252,6 +260,8 @@ export default function ResultsPage() {
                   src="/medium-square.png"
                   alt="Middle Decorative Ring"
                   fill
+                  priority
+                  sizes="(max-width: 768px) 230px, 444.34px"
                   className="object-contain"
                 />
               </div>
@@ -261,6 +271,8 @@ export default function ResultsPage() {
                   src="/small-square.png" 
                   alt="Inner Decorative Ring"
                   fill
+                  priority
+                  sizes="(max-width: 768px) 190px, 405.18px"
                   className="object-contain"
                 />
               </div>
@@ -276,6 +288,7 @@ export default function ResultsPage() {
                       src="/camera.svg" 
                       alt="Camera Icon"
                       fill
+                      priority
                       className="object-contain"
                     />
                   </div>
@@ -290,6 +303,7 @@ export default function ResultsPage() {
                       src="/ResScanLine.svg" 
                       alt="Face Scan UI"
                       fill
+                      priority
                       className="object-contain"
                     />
                   </div>
@@ -298,11 +312,13 @@ export default function ResultsPage() {
             </div>
 
             <div className="relative md:absolute md:left-[45%] lg:left-[50%] xl:left-[55%] flex flex-col items-center mt-12 md:mt-0 justify-center transition-opacity duration-300 opacity-100 z-20">
-              <div className="w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_120s_linear_infinite]">
+              <div className="relative w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_120s_linear_infinite]">
                 <Image 
                   src="/large-square.png"
                   alt="Outer Decorative Ring"
                   fill
+                  priority
+                  sizes="(max-width: 768px) 270px, 482px"
                   className="object-contain"
                 />
               </div>
@@ -312,6 +328,8 @@ export default function ResultsPage() {
                   src="/medium-square.png"
                   alt="Middle Decorative Ring"
                   fill
+                  priority
+                  sizes="(max-width: 768px) 230px, 444.34px"
                   className="object-contain"
                 />
               </div>
@@ -321,6 +339,8 @@ export default function ResultsPage() {
                   src="/small-square.png" 
                   alt="Inner Decorative Ring"
                   fill
+                  priority
+                  sizes="(max-width: 768px) 190px, 405.18px"
                   className="object-contain"
                 />
               </div>
@@ -336,6 +356,7 @@ export default function ResultsPage() {
                       src="/gallery-icon.svg" 
                       alt="Gallery Icon" 
                       fill
+                      priority
                       className="object-contain"
                     />
                   </div>
@@ -350,6 +371,7 @@ export default function ResultsPage() {
                       src="/ResScanLine.svg" 
                       alt="Gallery Line"
                       fill
+                      priority
                       className="object-contain"
                     />
                   </div>
