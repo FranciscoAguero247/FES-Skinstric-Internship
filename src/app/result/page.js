@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useImage } from '@/context/ImageContext';
 import Navbar from "@/components/Navbar";
+import DecorativeRings from "@/components/DecorativeRings";
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -191,42 +192,8 @@ export default function ResultsPage() {
       <div className="flex-grow flex flex-col items-center justify-center relative min-h-[700px] md:min-h-[750px] mb-10 mt-10">
         
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center relative w-full h-full min-h-[500px]">
-            <div className="relative flex flex-col items-center justify-center">
-              
-              <div className="relative w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_20s_linear_infinite]">
-                <Image
-                  src="/large-square.png"
-                  alt="Outer Decorative Ring"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 270px, 482px"
-                  className="object-contain"
-                />
-              </div>
-
-              <div className="absolute w-[230px] h-[230px] md:w-[444.34px] md:h-[444.34px] rotate-[190deg] animate-[spin_15s_linear_infinite] pointer-events-none">
-                <Image 
-                  src="/medium-square.png"
-                  alt="Middle Decorative Ring"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 230px, 444.34px"
-                  className="object-contain"
-                />
-              </div>
-
-              <div className="absolute w-[190px] h-[190px] md:w-[405.18px] md:h-[405.18px] rotate-45 animate-[spin_10s_linear_infinite] pointer-events-none">
-                <Image 
-                  src="/small-square.png" 
-                  alt="Inner Decorative Ring"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 190px, 405.18px"
-                  className="object-contain"
-                />
-              </div>
-
+          <div className="flex flex-col items-center justify-center relative w-full h-full min-h-[500px]">      
+            <DecorativeRings speed='fast'>
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <p className="text-xs md:text-sm font-semibold tracking-widest text-[#1A1B1C] text-center uppercase">
                   PREPARING YOUR ANALYSIS
@@ -238,45 +205,13 @@ export default function ResultsPage() {
                   <span className="w-1.5 h-1.5 bg-[#1A1B1C] rounded-full animate-bounce"></span>
                 </div>
               </div>
-
+            </DecorativeRings>
             </div>
-          </div>
         ) : (
           <div className="flex-[0.4] md:flex-1 flex flex-col md:flex-row items-center xl:justify-center relative mb-0 md:mb-[120px] space-y-4 md:space-y-0 w-full max-w-7xl h-full">
             <div className="relative md:absolute md:left-[55%] lg:left-[50%] xl:left-[40%] md:-translate-y-0 flex flex-col items-center justify-center z-20 md:-translate-x-full">
-              <div className="relative w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_120s_linear_infinite]">
-                <Image 
-                  src="/large-square.png"
-                  alt="Outer Decorative Ring"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 270px, 482px"
-                  className="object-contain"
-                />
-              </div>
-
-              <div className="absolute w-[230px] h-[230px] md:w-[444.34px] md:h-[444.34px] rotate-[190deg] animate-[spin_90s_linear_infinite] pointer-events-none">
-                <Image 
-                  src="/medium-square.png"
-                  alt="Middle Decorative Ring"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 230px, 444.34px"
-                  className="object-contain"
-                />
-              </div>
-
-              <div className="absolute w-[190px] h-[190px] md:w-[405.18px] md:h-[405.18px] rotate-45 animate-[spin_60s_linear_infinite] pointer-events-none">
-                <Image 
-                  src="/small-square.png" 
-                  alt="Inner Decorative Ring"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 190px, 405.18px"
-                  className="object-contain"
-                />
-              </div>
-
+              
+             <DecorativeRings speed='slow'>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <button 
                   onClick={handleCameraClick}
@@ -309,41 +244,13 @@ export default function ResultsPage() {
                   </div>
                 </div>
               </div>
+              </DecorativeRings>
             </div>
 
             <div className="relative md:absolute md:left-[45%] lg:left-[50%] xl:left-[55%] flex flex-col items-center mt-12 md:mt-0 justify-center transition-opacity duration-300 opacity-100 z-20">
-              <div className="relative w-[270px] h-[270px] md:w-[482px] md:h-[482px] animate-[spin_120s_linear_infinite]">
-                <Image 
-                  src="/large-square.png"
-                  alt="Outer Decorative Ring"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 270px, 482px"
-                  className="object-contain"
-                />
-              </div>
-
-              <div className="absolute w-[230px] h-[230px] md:w-[444.34px] md:h-[444.34px] rotate-[190deg] animate-[spin_90s_linear_infinite] pointer-events-none">
-                <Image 
-                  src="/medium-square.png"
-                  alt="Middle Decorative Ring"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 230px, 444.34px"
-                  className="object-contain"
-                />
-              </div>
-
-              <div className="absolute w-[190px] h-[190px] md:w-[405.18px] md:h-[405.18px] rotate-45 animate-[spin_60s_linear_infinite] pointer-events-none">
-                <Image 
-                  src="/small-square.png" 
-                  alt="Inner Decorative Ring"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 190px, 405.18px"
-                  className="object-contain"
-                />
-              </div>
+              
+              
+              <DecorativeRings speed='slow' >
 
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <button 
@@ -377,6 +284,7 @@ export default function ResultsPage() {
                   </div>
                 </div>
               </div>
+              </DecorativeRings>
             </div>
 
           </div>

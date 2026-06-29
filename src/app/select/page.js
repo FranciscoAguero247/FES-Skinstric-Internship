@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from "@/components/Navbar";
+import DecorativeRings from '@/components/DecorativeRings';
 
 function SelectResultsContent() {
   const searchParams = useSearchParams();
@@ -43,69 +44,9 @@ function SelectResultsContent() {
           <div className="relative w-[550px] h-[550px] flex items-center justify-center">
             
             <div className="absolute inset-0 pointer-events-none z-0 flex items-center justify-center overflow-visible">
-              
-              <div 
-                className={`absolute w-[460px] h-[460px] transition-all duration-500 ease-out ${
-                  hoveredNode === 'demo' ? 'opacity-100 scale-130' : 'opacity-0 scale-95'
-                }`}
-              >
-                <Image 
-                  alt="Diamond Small" 
-                  src="/small-square.png" 
-                  fill
-                  priority
-                  sizes="460px"
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-
-              <div 
-                className={`absolute w-[490px] h-[490px] transition-all duration-500 ease-out ${
-                  hoveredNode === 'cosmetic' ? 'opacity-100 scale-140' : 'opacity-0 scale-95'
-                }`}
-              >
-                <Image 
-                  alt="Diamond Medium - Cosmetic" 
-                  src="/medium-square.png" 
-                  fill
-                  priority
-                  sizes="490px"
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-
-              <div 
-                className={`absolute w-[490px] h-[490px] transition-all duration-500 ease-out ${
-                  hoveredNode === 'skintype' ? 'opacity-100 scale-140' : 'opacity-0 scale-95'
-                }`}
-              >
-                <Image 
-                  alt="Diamond Medium - Skin" 
-                  src="/medium-square.png" 
-                  fill
-                  priority
-                  sizes="490px"
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-
-              <div 
-                className={`absolute w-[520px] h-[520px] transition-all duration-500 ease-out ${
-                  hoveredNode === 'weather' ? 'opacity-100 scale-160' : 'opacity-0 scale-95'
-                }`}
-              >
-                <Image 
-                  alt="Diamond Large" 
-                  src="/large-square.png" 
-                  fill
-                  priority
-                  sizes="520px"
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-
+              <DecorativeRings hoveredNode={hoveredNode || 'idle'} />
             </div>
-
+            
             <div className="relative z-10 grid grid-cols-3 grid-rows-3 gap-0">
               
               <div 
