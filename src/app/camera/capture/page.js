@@ -66,26 +66,12 @@ export default function CameraCapturePage() {
 
   const handleUsePicture = () => {
     setIsAnalyzing(true);
+    
+    // Simulates the inline image analysis, then pushes directly to the selection view
     setTimeout(() => {
       router.push('/select');
     }, 3500); 
   };
-
-  if (isAnalyzing) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#1A1B1C] text-[#FCFCFC] px-6">
-        <div className="relative w-24 h-24 mb-8 flex items-center justify-center">
-          <div className="absolute inset-0 border-2 border-zinc-800 rounded-full"></div>
-          <div className="absolute inset-0 border-2 border-t-[#FCFCFC] rounded-full animate-spin"></div>
-          <div className="w-12 h-12 border border-zinc-700 rounded-full animate-ping opacity-25"></div>
-        </div>
-        <h2 className="text-xl font-light tracking-[0.2em] uppercase mb-2">Analyzing Profile</h2>
-        <p className="text-zinc-400 text-xs tracking-wider max-w-xs text-center leading-relaxed">
-          Evaluating texture, tone values, and hydration mapping elements...
-        </p>
-      </div>
-    );
-  }
 
   return (
     <div className="bg-white text-[#1A1B1C] antialiased min-h-screen flex flex-col">
@@ -196,30 +182,48 @@ export default function CameraCapturePage() {
                   className="absolute inset-0 w-full h-full object-cover" 
                   src={capturedImage} 
                 />
-                
-                <div className="absolute text-sm leading-6 uppercase text-[#FCFCFC] top-40">
-                  GREAT SHOT!
-                </div>
-                
-                <div className="absolute bottom-40 sm:bottom-16 left-0 right-0 flex flex-col items-center z-20">
-                  <h2 className="text-lg font-semibold mb-5 md:mb-7 text-[#FCFCFC] drop-shadow-md">
-                    Preview
-                  </h2>
-                  <div className="flex justify-center space-x-6">
-                    <button 
-                      onClick={() => setCapturedImage(null)}
-                      className="px-4 py-1 bg-gray-200 text-gray-800 cursor-pointer hover:bg-gray-300 shadow-md text-sm"
-                    >
-                      Retake
-                    </button>
-                    <button 
-                      onClick={handleUsePicture}
-                      className="px-6 py-2 bg-[#1A1B1C] text-[#FCFCFC] cursor-pointer hover:bg-gray-800 shadow-md text-sm"
-                    >
-                      Use This Photo
-                    </button>
-                  </div>
-                </div>
+
+                {/* Transparent Rounded Box Overlay that shows directly on top of the image */}
+                  {isAnalyzing ? (
+                    <div className="absolute inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-30">
+                      <div className="bg-gray border border-zinc-500/30 backdrop-blur-md px-8 py-6 rounded-2xl flex flex-col items-center shadow-2xl max-w-xs w-full mx-4 animate-pulse transition-all duration-300">
+                        <div className="flex flex-col items-center gap-2 text-[#FCFCFC] font-light tracking-[0.15em] uppercase text-xs text-center">
+                        <span>Analyzing Image</span>
+                        <span className="flex gap-0.5">
+                          <span className="animate-bounce delay-0 font-bold">.</span>
+                          <span className="animate-bounce delay-150 font-bold">.</span>
+                          <span className="animate-bounce delay-300 font-bold">.</span>
+                        </span>
+                      </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                    <div className="absolute text-sm leading-6 uppercase text-[#FCFCFC] top-40">
+                      GREAT SHOT!
+                    </div>
+                    
+                    <div className="absolute bottom-40 sm:bottom-16 left-0 right-0 flex flex-col items-center z-20">
+                      <h2 className="text-lg font-semibold mb-5 md:mb-7 text-[#FCFCFC] drop-shadow-md">
+                        Preview
+                      </h2>
+                      <div className="flex justify-center space-x-6">
+                        <button 
+                          onClick={() => setCapturedImage(null)}
+                          className="px-4 py-1 bg-gray-200 text-gray-800 cursor-pointer hover:bg-gray-300 shadow-md text-sm"
+                        >
+                          Retake
+                        </button>
+                        <button 
+                          onClick={handleUsePicture }
+                          className="px-6 py-2 bg-[#1A1B1C] text-[#FCFCFC] cursor-pointer hover:bg-gray-800 shadow-md text-sm"
+                        >
+                          Use This Photo
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </>
             )}
 
@@ -232,7 +236,8 @@ export default function CameraCapturePage() {
                 stopCameraStream();
                 router.push('/testing');
               }}
-              className="block focus:outline-none"
+              disabled={isAnalyzing}
+              className="block focus:outline-none disabled:opacity-30 disabled:pointer-events-none"
             >
               <div>
                 {/* Mobile Variant */}
