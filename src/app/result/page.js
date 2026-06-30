@@ -15,7 +15,6 @@ const STEPS = {
 export default function ResultsPage() {
   const router = useRouter();
   const { saveImage, imageBase64 } = useImage();
-  const [currentStep, setCurrentStep] = useState(STEPS.LOCATION);
   const [error, setError] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
@@ -129,23 +128,9 @@ export default function ResultsPage() {
     setError('');
   };
 
-  const startCameraStream = async () => {
+  const handleAllowCameraRedirect = () => {
     setShowCameraModal(false);
-    setImagePreview(null);
-    setIsCameraActive(true);
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
-      
-      streamRef.current = stream;
-      
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-    } catch (err) {
-      console.error("Camera access denied or unavailable:", err);
-      setIsCameraActive(false);
-      setError("Could not access camera device. Please try uploading via Gallery instead.");
-    }
+    router.push('/camera');
   };
 
   const handleDenyCamera = () => {
@@ -304,7 +289,7 @@ export default function ResultsPage() {
                           DENY
                         </button>
                         <button 
-                          onClick={startCameraStream}
+                          onClick={handleAllowCameraRedirect}
                           className="px-5 md:translate-x-45 text-[#FCFCFC] font-semibold text-sm leading-4 tracking-tight cursor-pointer hover:text-gray-300 transition-colors"
                         >
                           ALLOW
