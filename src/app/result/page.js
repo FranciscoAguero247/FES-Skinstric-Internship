@@ -21,6 +21,8 @@ export default function ResultsPage() {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [showCameraModal, setShowCameraModal] = useState(false);
+
   const fileInputRef = useRef(null);
   const videoRef = useRef(null);
   const streamRef = useRef(null);
@@ -97,14 +99,11 @@ export default function ResultsPage() {
     }
   };
 
-  const handleBackAction = () => {
-    setError('');
-    if (currentStep === STEPS.LOCATION) {
-      setCurrentStep(STEPS.NAME);
-    }
-  };
 
   const handleGalleryClick = () => {
+
+    if (showCameraModal || isCameraActive || isLoading) return;
+
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
@@ -126,10 +125,14 @@ export default function ResultsPage() {
 
   const handleCameraClick = async () => {
     if(isCameraActive || streamRef.current || isLoading) return;
+    setShowCameraModal(true);
+    setError('');
+  };
 
+  const startCameraStream = async () => {
+    setShowCameraModal(false);
     setImagePreview(null);
     setIsCameraActive(true);
-    setError('');
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
       
@@ -143,6 +146,10 @@ export default function ResultsPage() {
       setIsCameraActive(false);
       setError("Could not access camera device. Please try uploading via Gallery instead.");
     }
+  };
+
+  const handleDenyCamera = () => {
+    setShowCameraModal(false);
   };
 
   const capturePhoto = () => {
@@ -179,7 +186,7 @@ export default function ResultsPage() {
     setIsCameraActive(false);
   };
 
-  return (
+  return (  
     <div className="relative min-h-screen flex flex-col justify-between antialiased text-[#1A1B1C] bg-white overflow-hidden">
       <Navbar />
 
@@ -241,17 +248,20 @@ export default function ResultsPage() {
                 </div>
               </div>
             </DecorativeRings>
-            </div>
+          </div>
         ) : (
           <div className="flex-[0.4] md:flex-1 flex flex-col md:flex-row items-center xl:justify-center relative mb-0 md:mb-[120px] space-y-4 md:space-y-0 w-full max-w-7xl h-full">
+            
+            {/* CAMERA BUTTON WRAPPER */}
             <div className="relative md:absolute md:left-[55%] lg:left-[50%] xl:left-[40%] md:-translate-y-0 flex flex-col items-center justify-center z-20 md:-translate-x-full">
               
              <DecorativeRings speed='slow'>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <button 
                   onClick={handleCameraClick}
+                  disabled={showCameraModal}
                   aria-label="Scan face with camera"
-                  className="absolute w-[100px] h-[100px] md:w-[136px] md:h-[136px] flex items-center justify-center hover:scale-105 transition-transform duration-700 ease-in-out cursor-pointer z-30 group"
+                  className="absolute w-[100px] h-[100px] md:w-[136px] md:h-[136px] flex items-center justify-center hover:scale-105 transition-transform duration-700 ease-in-out cursor-pointer z-30 group disabled:pointer-events-none"
                 >
                   <div className="relative w-full h-full group-hover:-translate-y-0.5 transition-transform duration-300">
                     <Image 
@@ -278,18 +288,46 @@ export default function ResultsPage() {
                     />
                   </div>
                 </div>
+
+                {/* DYNAMIC CUSTOM MODAL INJECTED HERE */}
+                {showCameraModal && (
+                  <div className="absolute md:top-[43%] md:left-[340px] w-[352px] z-50">
+                    <div className="bg-[#1A1B1C] pt-4 pb-2 text-left">
+                      <h2 className="text-[#FCFCFC] text-base font-semibold mb-12 leading-[24px] pl-4">
+                        ALLOW A.I. TO ACCESS YOUR CAMERA
+                      </h2>
+                      <div className="flex mt-4 border-t border-[#FCFCFC] pt-2">
+                        <button 
+                          onClick={handleDenyCamera}
+                          className="px-7 md:translate-x-45 text-[#fcfcfca1] font-normal text-sm leading-4 tracking-tight cursor-pointer hover:text-gray-500 transition-colors"
+                        >
+                          DENY
+                        </button>
+                        <button 
+                          onClick={startCameraStream}
+                          className="px-5 md:translate-x-45 text-[#FCFCFC] font-semibold text-sm leading-4 tracking-tight cursor-pointer hover:text-gray-300 transition-colors"
+                        >
+                          ALLOW
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
               </div>
               </DecorativeRings>
             </div>
 
-            <div className="relative md:absolute md:left-[45%] lg:left-[50%] xl:left-[55%] flex flex-col items-center mt-12 md:mt-0 justify-center transition-opacity duration-300 opacity-100 z-20">
-              
+            {/* GALLERY BUTTON WRAPPER (Becomes ghosted and disabled if modal is active) */}
+            <div className={`relative md:absolute md:left-[45%] lg:left-[50%] xl:left-[55%] flex flex-col items-center mt-12 md:mt-0 justify-center transition-all duration-300 z-20 ${
+              showCameraModal ? 'opacity-25 pointer-events-none grayscale select-none' : 'opacity-100'
+            }`}>
               
               <DecorativeRings speed='slow' >
-
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <button 
                   onClick={handleGalleryClick}
+                  disabled={showCameraModal}
                   aria-label="Upload from gallery"
                   className="absolute w-[100px] h-[100px] md:w-[136px] md:h-[136px] flex items-center justify-center hover:scale-105 transition-transform duration-700 ease-in-out cursor-pointer z-30 group"
                 >
@@ -334,33 +372,31 @@ export default function ResultsPage() {
         />
 
         <div className="absolute bottom-0 w-full flex justify-between px-9 z-30 items-center">
-          
-            <button
-              disabled={isLoading}
-              onClick={()=>{
-                stopCamera();
-                router.push('/testing');
-              }}
-              className={`group flex items-center focus:outline-none ${isLoading ? 'opacity-30 pointer-events-none' : ''}`}
-              aria-label="Go Back"
-            >
-              <div className="flex items-center">
-                <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
-                  <span className="rotate-[-45deg] text-xs font-semibold">BACK</span>
-                </div>
-
-                <div className="hidden sm:flex flex-row relative justify-center items-center">
-                  <div className="w-12 h-12 flex justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] transform transition-transform duration-300 ease-out group-hover:scale-[0.92]"></div>
-                  <span className="absolute left-[15px] bottom-[13px] scale-[0.9] rotate-180 transform transition-transform duration-300 ease-out group-hover:translate-x-[-2px]">
-                    ▶
-                  </span>
-                  <span className="text-sm font-semibold ml-6 tracking-wide text-[#1A1B1C]">
-                    BACK
-                  </span>
-                </div>
+          <button
+            disabled={isLoading}
+            onClick={()=>{
+              stopCamera();
+              router.push('/testing');
+            }}
+            className={`group flex items-center focus:outline-none ${isLoading ? 'opacity-30 pointer-events-none' : ''}`}
+            aria-label="Go Back"
+          >
+            <div className="flex items-center">
+              <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
+                <span className="rotate-[-45deg] text-xs font-semibold">BACK</span>
               </div>
-            </button>
-          
+
+              <div className="hidden sm:flex flex-row relative justify-center items-center">
+                <div className="w-12 h-12 flex justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] transform transition-transform duration-300 ease-out group-hover:scale-[0.92]"></div>
+                <span className="absolute left-[15px] bottom-[13px] scale-[0.9] rotate-180 transform transition-transform duration-300 ease-out group-hover:translate-x-[-2px]">
+                  ▶
+                </span>
+                <span className="text-sm font-semibold ml-6 tracking-wide text-[#1A1B1C]">
+                  BACK
+                </span>
+              </div>
+            </div>
+          </button>
         </div>
 
       </div>
