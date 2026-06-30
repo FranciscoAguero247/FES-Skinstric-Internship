@@ -12,7 +12,6 @@ export default function CameraCapturePage() {
   const [capturedImage, setCapturedImage] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [streamActive, setStreamActive] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const activeStreamRef = useRef(null);
 
@@ -56,8 +55,6 @@ export default function CameraCapturePage() {
       
       const context = canvas.getContext('2d');
       if (context) {
-        context.translate(canvas.width, 0);
-        context.scale(-1, 1);
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         
         const dataUrl = canvas.toDataURL('image/jpeg');
@@ -114,28 +111,22 @@ export default function CameraCapturePage() {
       {/* FULL SCREEN CAMERA VIEWPORT MAIN BOX */}
       <div className="h-[90vh] w-screen flex-1">
         <div className="relative h-[100vh] w-screen overflow-hidden bg-gray-900">
-          <div className="absolute inset-0 z-10">
+          
+          {/* Main Display Wrapper - Updates Layout Classes based on State */}
+          <div className={`absolute inset-0 z-10 ${capturedImage ? 'flex flex-col items-center' : ''}`}>
             
-            {/* Viewport Core Feed Stream Rendering Wrapper */}
             {!capturedImage ? (
-              <video 
-                ref={videoRef} 
-                autoPlay 
-                playsInline 
-                className="absolute inset-0 w-full h-full object-cover" 
-              />
-            ) : (
-              <img 
-                src={capturedImage} 
-                alt="Capture Preview" 
-                className="absolute inset-0 w-full h-full object-cover" 
-              />
-            )}
+              <>
+                {/* 1. Live Video Stream View */}
+                <video 
+                  ref={videoRef} 
+                  autoPlay 
+                  playsInline 
+                  className="absolute inset-0 w-full h-full object-cover" 
+                />
 
-            {/* ACTION TRIGGERS: RIGHT ABSOLUTE MIDPOINT ALIGNMENT */}
-            <div className="absolute right-8 top-1/2 transform -translate-y-1/2 z-20 flex items-center space-x-3">
-              {!capturedImage ? (
-                <>
+                {/* 2. Action Trigger for Capturing Stream */}
+                <div className="absolute right-8 top-1/2 transform -translate-y-1/2 z-20 flex items-center space-x-3">
                   <div className="font-semibold text-sm tracking-tight leading-[14px] text-[#FCFCFC] hidden sm:block">
                     TAKE PICTURE
                   </div>
@@ -147,85 +138,91 @@ export default function CameraCapturePage() {
                       onClick={handleCapture}
                     />
                   </div>
-                </>
-              ) : (
-                <div className="flex flex-col gap-4 transform translate-y-[-20%]">
-                  <button 
-                    onClick={() => setCapturedImage(null)}
-                    className="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-[#FCFCFC] bg-[#1A1B1C]/80 backdrop-blur border border-zinc-700 hover:bg-[#1A1B1C] transition duration-200"
-                  >
-                    Retake
-                  </button>
-                  <button 
-                    onClick={handleUsePicture}
-                    className="py-3 px-6 text-xs font-bold uppercase tracking-wider text-[#1A1B1C] bg-[#FCFCFC] shadow-2xl hover:bg-zinc-200 transition duration-200"
-                  >
-                    Use Picture
-                  </button>
                 </div>
-              )}
-            </div>
 
-            {/* SYSTEM INSTRUCTIONS PANEL - BOTTOM DEPLOYED LAYER */}
-              <div className="absolute bottom-16 sm:bottom-24 left-0 right-0 text-center z-20 pointer-events-none text-[#FCFCFC]">
-                {!capturedImage ? (
-                  <>
-                    <p className="text-[14px] leading-[24px] tracking-normal text-center uppercase font-normal mb-6">
-                      TO GET BETTER RESULTS MAKE SURE TO HAVE
-                    </p>
+                {/* 3. Pre-Capture Instructions Overlays */}
+                <div className="absolute bottom-16 sm:bottom-24 left-0 right-0 text-center z-20 pointer-events-none text-[#FCFCFC]">
+                  <p className="text-[14px] leading-[24px] tracking-normal text-center uppercase font-normal mb-6">
+                    TO GET BETTER RESULTS MAKE SURE TO HAVE
+                  </p>
 
-                    <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-12 justify-center">
-                      {/* Requirement 1 */}
-                      <div className="flex items-center gap-2 font-medium text-sm">
-                        <div className="relative w-4 h-4">
-                          <Image 
-                            src="/bullet-rectangle-icon.png" 
-                            alt="Bullet Icon"
-                            fill
-                            priority
-                            className="object-contain invert brightness-0 img-white"
-                          />
-                        </div>
-                        <span>NEUTRAL EXPRESSION</span>
+                  <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-12 justify-center">
+                    <div className="flex items-center gap-2 font-medium text-sm">
+                      <div className="relative w-4 h-4">
+                        <Image 
+                          src="/bullet-rectangle-icon.png" 
+                          alt="Bullet Icon"
+                          fill
+                          priority
+                          className="object-contain invert brightness-0 img-white"
+                        />
                       </div>
-
-                      {/* Requirement 2 */}
-                      <div className="flex items-center gap-2 font-medium text-sm">
-                        <div className="relative w-4 h-4">
-                          <Image 
-                            src="/bullet-rectangle-icon.png" 
-                            alt="Bullet Icon"
-                            fill
-                            priority
-                            className="object-contain invert brightness-0 img-white"
-                          />
-                        </div>
-                        <span>FRONTAL POSE</span>
-                      </div>
-
-                      {/* Requirement 3 */}
-                      <div className="flex items-center gap-2 font-medium text-sm">
-                        <div className="relative w-4 h-4">
-                          <Image 
-                            src="/bullet-rectangle-icon.png" 
-                            alt="Bullet Icon"
-                            fill
-                            priority
-                            className="object-contain invert brightness-0 img-white"
-                          />
-                        </div>
-                        <span>ADEQUATE LIGHTING</span>
-                      </div>
+                      <span>NEUTRAL EXPRESSION</span>
                     </div>
-                  </>
-                ) : (
-                  <div className="max-w-xs mx-auto bg-[#1A1B1C]/80 backdrop-blur-md px-6 py-3 border border-zinc-700 rounded shadow-xl pointer-events-auto">
-                    <p className="text-xs text-[#FCFCFC] tracking-wide leading-relaxed">
-                      Review image. Ensure facial regions are evenly illuminated.
-                    </p>
+
+                    <div className="flex items-center gap-2 font-medium text-sm">
+                      <div className="relative w-4 h-4">
+                        <Image 
+                          src="/bullet-rectangle-icon.png" 
+                          alt="Bullet Icon"
+                          fill
+                          priority
+                          className="object-contain invert brightness-0 img-white"
+                        />
+                      </div>
+                      <span>FRONTAL POSE</span>
+                    </div>
+
+                    <div className="flex items-center gap-2 font-medium text-sm">
+                      <div className="relative w-4 h-4">
+                        <Image 
+                          src="/bullet-rectangle-icon.png" 
+                          alt="Bullet Icon"
+                          fill
+                          priority
+                          className="object-contain invert brightness-0 img-white"
+                        />
+                      </div>
+                      <span>ADEQUATE LIGHTING</span>
+                    </div>
                   </div>
-                )}
-              </div>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Final Snapshot Shot UI Layout */}
+                <img 
+                  alt="Captured selfie" 
+                  className="absolute inset-0 w-full h-full object-cover" 
+                  src={capturedImage} 
+                />
+                
+                <div className="absolute text-sm leading-6 uppercase text-[#FCFCFC] top-40">
+                  GREAT SHOT!
+                </div>
+                
+                <div className="absolute bottom-40 sm:bottom-16 left-0 right-0 flex flex-col items-center z-20">
+                  <h2 className="text-lg font-semibold mb-5 md:mb-7 text-[#FCFCFC] drop-shadow-md">
+                    Preview
+                  </h2>
+                  <div className="flex justify-center space-x-6">
+                    <button 
+                      onClick={() => setCapturedImage(null)}
+                      className="px-4 py-1 bg-gray-200 text-gray-800 cursor-pointer hover:bg-gray-300 shadow-md text-sm"
+                    >
+                      Retake
+                    </button>
+                    <button 
+                      onClick={handleUsePicture}
+                      className="px-6 py-2 bg-[#1A1B1C] text-[#FCFCFC] cursor-pointer hover:bg-gray-800 shadow-md text-sm"
+                    >
+                      Use This Photo
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
           </div>
 
           {/* BACK GRAPHIC NAVIGATION CONTROL - BOTTOM LEFT LAYER */}
