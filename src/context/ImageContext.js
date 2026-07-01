@@ -28,9 +28,8 @@ export function ImageProvider({ children }) {
         sessionStorage.removeItem('skinstric_captured_image');
       }
     } catch (error) {
-      console.warn(
-        "sessionStorage quota exceeded or restricted. Falling back to context memory state only.",
-        error
+      console.info(
+        "Image saved to context memory. Note: SessionStorage quota exceeded due to high resolution."
       );
     }
   };
