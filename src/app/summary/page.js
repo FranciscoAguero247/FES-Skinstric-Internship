@@ -8,29 +8,25 @@ import Navbar from '@/components/Navbar';
 function DemographicsAnalysisContent() {
   const searchParams = useSearchParams();
 
-  // 1. Safely parse incoming payload data matrix
   const rawDetails = searchParams.get('details');
   let apiData = null;
 
   if (rawDetails) {
     try {
       const parsed = JSON.parse(decodeURIComponent(rawDetails));
-      // Support nested templates under .data or flat objects
       apiData = parsed.data || parsed;
     } catch (e) {
       console.error("Failed to decode analytics payload", e);
     }
   }
 
-  // 2. Map API decimals into rounded percentages for your visual lists
   const formatDataset = (apiSubObject) => {
     if (!apiSubObject) return [];
     return Object.entries(apiSubObject)
       .map(([name, probability]) => ({
-        name: name, // keeps exact string casing from API
+        name: name,
         percentage: Math.round(probability * 100)
       }))
-      // Sort highest confidence first to look professional
       .sort((a, b) => b.percentage - a.percentage);
   };
 
@@ -55,13 +51,10 @@ function DemographicsAnalysisContent() {
     ],
   };
 
-  // Helper to extract top prediction key as initial selection fallback
   const getTopKey = (dataset) => dataset[0]?.name || '';
 
-  // Core navigation category tracking ('RACE' | 'AGE' | 'SEX')
   const [activeTab, setActiveTab] = useState('RACE');
 
-  // Active selection states initialized dynamically to the top API predictions
   const [selections, setSelections] = useState({
     RACE: getTopKey(dynamicData.RACE) || 'Middle eastern',
     AGE: getTopKey(dynamicData.AGE) || '30-39',
@@ -71,11 +64,9 @@ function DemographicsAnalysisContent() {
   const currentDataset = dynamicData[activeTab];
   const activeSelectionName = selections[activeTab];
   
-  // Find current confidence level to map directly to the circular dashboard graphic
   const currentMetric = currentDataset.find(item => item.name === activeSelectionName) || currentDataset[0];
   const activePercentage = currentMetric ? currentMetric.percentage : 0;
 
-  // Formula to calculate SVG circle fill progress offset: Total circumference is ~308.819px
   const maxStrokeOffset = 308.819;
   const computedStrokeOffset = maxStrokeOffset - (maxStrokeOffset * activePercentage) / 100;
 
@@ -88,17 +79,14 @@ function DemographicsAnalysisContent() {
       <div className="md:h-full max-w-full mx-5 px-4 md:px-auto flex flex-col">
         <Navbar />
         
-        {/* Header Block */}
         <div className="text-start ml-4 mb-4 md:mb-10 md:ml-0">
           <h2 className="text-base font-semibold mb-1 leading-[24px]">A.I. ANALYSIS</h2>
           <h3 className="text-4xl md:text-[72px] font-normal leading-[64px] tracking-tighter">DEMOGRAPHICS</h3>
           <h4 className="text-sm mt-2 leading-[24px]">PREDICTED RACE &amp; AGE</h4>
         </div>
 
-        {/* Dashboard Grid Split */}
         <div className="grid md:grid-cols-[1.5fr_8.5fr_3.15fr] gap-4 mt-10 mb-40 md:gap-4 pb-0 md:pb-0 md:mb-0">
-          
-          {/* Left Navigation: Metric Categories */}
+
           <div className="bg-white space-y-3 md:flex md:flex-col h-[62%]">
             <button 
               onClick={() => setActiveTab('RACE')}
@@ -129,7 +117,6 @@ function DemographicsAnalysisContent() {
             </button>
           </div>
 
-          {/* Center Column: Interactive Circular Progress Ring */}
           <div className="relative bg-gray-100 p-4 flex flex-col items-center justify-center md:h-[57vh] md:border-t">
             <p className="hidden md:block md:absolute text-[40px] mb-2 left-5 top-2 font-normal capitalize">
               {activeSelectionName}
@@ -167,7 +154,6 @@ function DemographicsAnalysisContent() {
             </p>
           </div>
 
-          {/* Right Column: Complete breakdown selection list */}
           <div className="bg-gray-100 pt-4 pb-4 md:border-t">
             <div className="flex justify-between px-4 border-b border-gray-200/50 pb-2">
               <h4 className="text-xs uppercase tracking-wider leading-[24px] font-semibold text-slate-500">{activeTab}</h4>
@@ -206,8 +192,7 @@ function DemographicsAnalysisContent() {
           </div>
 
         </div>
-
-        {/* Global Footer Direction Anchors */}
+        
         <div className="pt-4 md:pt-[37px] pb-6 bg-white sticky bottom-40 md:static md:bottom-0 mb-8 md:mb-16">
           <div className="flex justify-between max-w-full mx-auto px-4 md:px-0">
             

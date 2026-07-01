@@ -1,4 +1,3 @@
-// src/utils/analytics.js
 export function extractTopDemographics(data) {
   if (!data) return null;
 

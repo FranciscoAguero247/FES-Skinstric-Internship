@@ -14,7 +14,7 @@ export default function CameraCapturePage() {
 
   const [capturedImage, setCapturedImage] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [streamActive, setStreamActive] = useState(false);
+  const [, setStreamActive] = useState(false);
   const [error, setError] = useState('');
 
   const activeStreamRef = useRef(null);
@@ -81,14 +81,12 @@ export default function CameraCapturePage() {
     }
   };
 
- // 3. Verified Backend Pipeline Action Execution
   const handleUsePicture = async () => {
     stopCameraStream();
     setIsAnalyzing(true);
     setError('');
 
     try {
-      // Dispatch payload to production cloud functions endpoint matching your Results view layout
       const response = await fetch('https://us-central1-frontend-simplified.cloudfunctions.net/skinstricPhaseTwo', {
         method: 'POST',
         headers: {
@@ -103,13 +101,11 @@ export default function CameraCapturePage() {
 
       const data = await response.json();
 
-      // 4. Parse incoming token / metrics responses to string url parameters
       const queryParams = new URLSearchParams({
         status: data.status || 'success',
         details: JSON.stringify(data.analysis || data)
       }).toString();
 
-      // Clear layout and route forward
       router.push(`/select?${queryParams}`);
 
     } catch (err) {
@@ -140,16 +136,14 @@ export default function CameraCapturePage() {
         </div>
       </div>
 
-      {/* FULL SCREEN CAMERA VIEWPORT MAIN BOX */}
+
       <div className="h-[100vh] w-screen flex-1">
         <div className="relative h-[100vh] w-screen overflow-hidden bg-gray-900">
           
-          {/* Main Display Wrapper - Updates Layout Classes based on State */}
           <div className={`absolute inset-0 z-10 ${capturedImage ? 'flex flex-col items-center' : ''}`}>
             
             {!capturedImage ? (
               <>
-                {/* 1. Live Video Stream View */}
                 <video 
                   ref={videoRef} 
                   autoPlay 
@@ -158,7 +152,6 @@ export default function CameraCapturePage() {
                   className="absolute inset-0 w-full h-full object-cover" 
                 />
 
-                {/* 2. Action Trigger for Capturing Stream */}
                 <div className="absolute right-8 top-1/2 transform -translate-y-1/2 z-20 flex items-center space-x-3">
                   <div className="font-semibold text-sm tracking-tight leading-[14px] text-[#FCFCFC] hidden sm:block">
                     TAKE PICTURE
@@ -222,14 +215,11 @@ export default function CameraCapturePage() {
               </>
             ) : (
               <>
-                {/* Final Snapshot Shot UI Layout */}
                 <img 
                   alt="Captured selfie" 
                   className="absolute inset-0 w-full h-full object-cover" 
                   src={capturedImage} 
                 />
-
-                {/* Transparent Rounded Box Overlay that shows directly on top of the image */}
                   {isAnalyzing ? (
                     <div className="absolute inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-30">
                       <div className="bg-gray border border-zinc-500/30 backdrop-blur-md px-8 py-6 rounded-2xl flex flex-col items-center shadow-2xl max-w-xs w-full mx-4 animate-pulse transition-all duration-300">
@@ -284,8 +274,6 @@ export default function CameraCapturePage() {
             )}
 
           </div>
-
-          {/* BACK GRAPHIC NAVIGATION CONTROL - BOTTOM LEFT LAYER */}
           <div className="absolute md:bottom-8 bottom-60 left-8 z-20">
             <button 
               onClick={() => {
@@ -298,12 +286,10 @@ export default function CameraCapturePage() {
               className="block focus:outline-none disabled:opacity-30 disabled:pointer-events-none"
             >
               <div>
-                {/* Mobile Variant */}
                 <div className="relative w-12 h-12 flex items-center justify-center border border-[#FCFCFC] rotate-45 scale-[1] sm:hidden">
                   <span className="rotate-[-45deg] text-xs font-semibold sm:hidden text-[#FCFCFC]">BACK</span>
                 </div>
                 
-                {/* Desktop Variant */}
                 <div className="group hidden sm:flex flex-row relative justify-center items-center">
                   <div className="w-12 h-12 hidden sm:flex justify-center border border-[#FCFCFC] rotate-45 scale-[0.85] group-hover:scale-[0.92] ease duration-300"></div>
                   <span className="absolute left-[15px] bottom-[13px] scale-[0.9] rotate-180 hidden sm:block text-[#FCFCFC] group-hover:scale-[0.92] ease duration-300">

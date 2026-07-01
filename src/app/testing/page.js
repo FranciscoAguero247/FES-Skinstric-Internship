@@ -47,19 +47,15 @@ export default function TestingPage() {
     }
   };
 
-  // Load saved values on initial render
   useEffect(() => {
     const savedName = localStorage.getItem('skinstric_name') || '';
     const savedLocation = localStorage.getItem('skinstric_location') || '';
     
     setUserData({ name: savedName, location: savedLocation });
     
-    // Start the user on the step they actually need to fill out
     if (savedName && !savedLocation) {
       setCurrentStep(STEPS.LOCATION);
     } else if (savedName && savedLocation) {
-      // If they already finished both but refreshed, you could either 
-      // keep them at LOCATION or jump them to SUCCESS depending on preference.
       setCurrentStep(STEPS.LOCATION); 
     }
   }, []);
@@ -228,7 +224,7 @@ export default function TestingPage() {
           </div>
         </button>
       ) : (
-        <div className="w-10"></div> // Layout balance spacer once success renders
+        <div className="w-10"></div>
       )}
 
         {currentStep === STEPS.SUCCESS && (

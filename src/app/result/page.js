@@ -7,10 +7,6 @@ import Navbar from "@/components/Navbar";
 import DecorativeRings from "@/components/DecorativeRings";
 import Image from 'next/image';
 
-const STEPS = {
-  NAME: 'NAME',
-  LOCATION: 'LOCATION'
-};
 
 export default function ResultsPage() {
   const router = useRouter();
@@ -274,7 +270,6 @@ export default function ResultsPage() {
                   </div>
                 </div>
 
-                {/* DYNAMIC CUSTOM MODAL INJECTED HERE */}
                 {showCameraModal && (
                   <div className="absolute md:top-[43%] md:left-[340px] w-[352px] z-50">
                     <div className="bg-[#1A1B1C] pt-4 pb-2 text-left">
@@ -303,7 +298,6 @@ export default function ResultsPage() {
               </DecorativeRings>
             </div>
 
-            {/* GALLERY BUTTON WRAPPER (Becomes ghosted and disabled if modal is active) */}
             <div className={`relative md:absolute md:left-[45%] lg:left-[50%] xl:left-[55%] flex flex-col items-center mt-12 md:mt-0 justify-center transition-all duration-300 z-20 ${
               showCameraModal ? 'opacity-25 pointer-events-none grayscale select-none' : 'opacity-100'
             }`}>

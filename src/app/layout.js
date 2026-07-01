@@ -1,4 +1,3 @@
-// src/app/layout.js
 import { ImageProvider } from '@/context/ImageContext';
 import './globals.css';
 

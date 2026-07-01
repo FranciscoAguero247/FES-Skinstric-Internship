@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 export default function CameraPermissionPage() {
   const router = useRouter();
-  const [status, setStatus] = useState('Requesting camera access...');
+  const [, setStatus] = useState('Requesting camera access...');
 
   useEffect(() => {
     async function verifyAndRedirect() {
