@@ -47,6 +47,23 @@ export default function TestingPage() {
     }
   };
 
+  // Load saved values on initial render
+  useEffect(() => {
+    const savedName = localStorage.getItem('skinstric_name') || '';
+    const savedLocation = localStorage.getItem('skinstric_location') || '';
+    
+    setUserData({ name: savedName, location: savedLocation });
+    
+    // Start the user on the step they actually need to fill out
+    if (savedName && !savedLocation) {
+      setCurrentStep(STEPS.LOCATION);
+    } else if (savedName && savedLocation) {
+      // If they already finished both but refreshed, you could either 
+      // keep them at LOCATION or jump them to SUCCESS depending on preference.
+      setCurrentStep(STEPS.LOCATION); 
+    }
+  }, []);
+
   const handleNextAction = async () => {
     const validationError = validateInput(inputValue);
     if (validationError) {
@@ -80,6 +97,8 @@ export default function TestingPage() {
         const result = await response.json();
 
         if (result && result.success === true) {
+          localStorage.removeItem('skinstric_name');
+          localStorage.removeItem('skinstric_location');
           setCurrentStep(STEPS.SUCCESS);
         } else {
           setError('Backend registration failed. Please try again.');
@@ -179,32 +198,35 @@ export default function TestingPage() {
      <div className="absolute bottom-4 w-full flex justify-between px-9 z-30 min-h-[48px] items-center">
   
       {currentStep !== STEPS.SUCCESS ? (
-        <Link
-        href={"/"}>
-          <button 
-                  onClick={handleBackAction} 
-                  className="group flex items-center focus:outline-none"
-                  aria-label="Go Back"
-                >
-            <div className="flex items-center">
-              
-              <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
-                <span className="rotate-[-45deg] text-xs font-semibold">BACK</span>
-              </div>
-
-              <div className="hidden sm:flex flex-row relative justify-center items-center">
-                <div className="w-12 h-12 flex justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] transform transition-transform duration-300 ease-out group-hover:scale-[0.92]"></div>
-                <span className="absolute left-[15px] bottom-[13px] scale-[0.9] rotate-180 transform transition-transform duration-300 ease-out group-hover:translate-x-[-2px]">
-                  ▶
-                </span>
-                <span className="text-sm font-semibold ml-6 tracking-wide text-[#1A1B1C]">
-                  BACK
-                </span>
-              </div>
-
+        <button 
+          onClick={() => {
+            if (currentStep === STEPS.LOCATION) {
+              handleBackAction();
+            } else {
+              window.location.href = "/";
+            }
+          }}
+          className="group flex items-center focus:outline-none"
+          aria-label="Go Back"
+        >
+          <div className="flex items-center">
+            
+            <div className="relative w-12 h-12 flex items-center justify-center border border-[#1A1B1C] rotate-45 scale-[1] sm:hidden">
+              <span className="rotate-[-45deg] text-xs font-semibold">BACK</span>
             </div>
-          </button>
-        </Link>
+
+            <div className="hidden sm:flex flex-row relative justify-center items-center">
+              <div className="w-12 h-12 flex justify-center border border-[#1A1B1C] rotate-45 scale-[0.85] transform transition-transform duration-300 ease-out group-hover:scale-[0.92]"></div>
+              <span className="absolute left-[15px] bottom-[13px] scale-[0.9] rotate-180 transform transition-transform duration-300 ease-out group-hover:translate-x-[-2px]">
+                ▶
+              </span>
+              <span className="text-sm font-semibold ml-6 tracking-wide text-[#1A1B1C]">
+                BACK
+              </span>
+            </div>
+
+          </div>
+        </button>
       ) : (
         <div className="w-10"></div> // Layout balance spacer once success renders
       )}
