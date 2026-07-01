@@ -3,15 +3,19 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useImage } from '@/context/ImageContext';
 
 export default function CameraCapturePage() {
   const router = useRouter();
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
+  const { saveImage } = useImage();
+
   const [capturedImage, setCapturedImage] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [streamActive, setStreamActive] = useState(false);
+  const [error, setError] = useState('');
 
   const activeStreamRef = useRef(null);
 
@@ -42,6 +46,7 @@ export default function CameraCapturePage() {
       })
       .catch((err) => {
         console.error("Error connecting to webcam feed: ", err);
+        setError("Could not connect to webcam. Verify system camera access.");
       });
     }
 
@@ -64,30 +69,54 @@ export default function CameraCapturePage() {
       if (context) {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         
-        const dataUrl = canvas.toDataURL('image/jpeg');
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
         setCapturedImage(dataUrl);
+
+        if(saveImage){
+          saveImage(dataUrl)
+        }
+
         stopCameraStream();
       }
     }
   };
 
-  const handleUsePicture = () => {
-    if (activeStreamRef.current) {
-      activeStreamRef.current.getTracks().forEach((track) => {
-        track.stop();
-      });
-      activeStreamRef.current = null;
-    }
-    if (videoRef.current) {
-      videoRef.current.srcObject = null;
-    }
-    setStreamActive(false);
-
+ // 3. Verified Backend Pipeline Action Execution
+  const handleUsePicture = async () => {
+    stopCameraStream();
     setIsAnalyzing(true);
-    
-    setTimeout(() => {
-    router.push('/select');
-  }, 3500);
+    setError('');
+
+    try {
+      // Dispatch payload to production cloud functions endpoint matching your Results view layout
+      const response = await fetch('https://us-central1-frontend-simplified.cloudfunctions.net/skinstricPhaseTwo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ image: capturedImage })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to analyze image payload through the backend pipeline.');
+      }
+
+      const data = await response.json();
+
+      // 4. Parse incoming token / metrics responses to string url parameters
+      const queryParams = new URLSearchParams({
+        status: data.status || 'success',
+        details: JSON.stringify(data.analysis || data)
+      }).toString();
+
+      // Clear layout and route forward
+      router.push(`/select?${queryParams}`);
+
+    } catch (err) {
+      console.error("Pipeline Transmission Error:", err);
+      setError(err.message || 'Something went wrong during analysis pipeline processing.');
+      setIsAnalyzing(false);
+    }
   };
 
   return (
@@ -144,7 +173,6 @@ export default function CameraCapturePage() {
                   </div>
                 </div>
 
-                {/* 3. Pre-Capture Instructions Overlays */}
                 <div className="absolute bottom-16 sm:bottom-24 left-0 right-0 text-center z-20 pointer-events-none text-[#FCFCFC]">
                   <p className="text-[14px] leading-[24px] tracking-normal text-center uppercase font-normal mb-6">
                     TO GET BETTER RESULTS MAKE SURE TO HAVE
@@ -225,9 +253,19 @@ export default function CameraCapturePage() {
                       <h2 className="text-lg font-semibold mb-5 md:mb-7 text-[#FCFCFC] drop-shadow-md">
                         Preview
                       </h2>
+
+                      {error && (
+                        <p className="bg-red-600/90 text-[#FCFCFC] px-4 py-2 text-xs mb-4 rounded shadow-md max-w-sm text-center">
+                          {error}
+                        </p>
+                      )}
+
                       <div className="flex justify-center space-x-6">
                         <button 
-                          onClick={() => setCapturedImage(null)}
+                          onClick={() => {
+                            setCapturedImage(null);
+                            setError('');
+                          }}
                           className="px-4 py-1 bg-gray-200 text-gray-800 cursor-pointer hover:bg-gray-300 shadow-md text-sm"
                         >
                           Retake
