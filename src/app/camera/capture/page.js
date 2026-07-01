@@ -16,8 +16,13 @@ export default function CameraCapturePage() {
   const activeStreamRef = useRef(null);
 
   const stopCameraStream = () => {
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
     if (activeStreamRef.current) {
-      activeStreamRef.current.getTracks().forEach((track) => track.stop());
+      activeStreamRef.current.getTracks().forEach((track) => {
+        track.stop();
+      });
       activeStreamRef.current = null;
     }
     setStreamActive(false);
@@ -49,6 +54,8 @@ export default function CameraCapturePage() {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
+
+      if (video.videoWidth === 0 || video.videoHeight === 0) return;
       
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
@@ -65,12 +72,22 @@ export default function CameraCapturePage() {
   };
 
   const handleUsePicture = () => {
+    if (activeStreamRef.current) {
+      activeStreamRef.current.getTracks().forEach((track) => {
+        track.stop();
+      });
+      activeStreamRef.current = null;
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+    setStreamActive(false);
+
     setIsAnalyzing(true);
     
-    // Simulates the inline image analysis, then pushes directly to the selection view
     setTimeout(() => {
-      router.push('/select');
-    }, 3500); 
+    router.push('/select');
+  }, 3500);
   };
 
   return (
@@ -95,7 +112,7 @@ export default function CameraCapturePage() {
       </div>
 
       {/* FULL SCREEN CAMERA VIEWPORT MAIN BOX */}
-      <div className="h-[90vh] w-screen flex-1">
+      <div className="h-[100vh] w-screen flex-1">
         <div className="relative h-[100vh] w-screen overflow-hidden bg-gray-900">
           
           {/* Main Display Wrapper - Updates Layout Classes based on State */}
@@ -108,6 +125,7 @@ export default function CameraCapturePage() {
                   ref={videoRef} 
                   autoPlay 
                   playsInline 
+                  muted
                   className="absolute inset-0 w-full h-full object-cover" 
                 />
 
@@ -234,7 +252,9 @@ export default function CameraCapturePage() {
             <button 
               onClick={() => {
                 stopCameraStream();
-                router.push('/testing');
+                setTimeout(() => {
+                  router.push('/testing');
+                }, 100);
               }}
               disabled={isAnalyzing}
               className="block focus:outline-none disabled:opacity-30 disabled:pointer-events-none"
@@ -258,7 +278,6 @@ export default function CameraCapturePage() {
               </div>
             </button>
           </div>
-
           <canvas ref={canvasRef} className="hidden"></canvas>
         </div>
       </div>
